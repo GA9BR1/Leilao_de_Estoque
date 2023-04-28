@@ -30,33 +30,36 @@ class CpfValidator < ActiveModel::EachValidator
   SIZE_VALIDATION = /^[0-9]{11}$/
 
   def cpf_valid?(cpf)
-    cpf = cpf.to_s
     return false unless cpf =~ SIZE_VALIDATION
 
     return false if DENY_LIST.include?(cpf)
 
-    index = 10
-    soma1 = 0
-    soma2 = 0
-    cpf.each_char do |numero|
-      soma1 += numero.to_i * index
-      break if index == 2
+    cpf = cpf.chars
 
-      index -= 1
+    dig1 = []
+    dig2 = []
+    modt = 0
+
+    cpf.zip(10.downto(2).to_a) do |num, multi|
+      dig1 << (num.to_i * multi.to_i)
     end
-    dig1 = 11 - (soma1 % 11)
-    return false if dig1 > 9 && cpf.chars[-2].to_i != 0 || dig1 <= 9 && cpf.chars[-2].to_i != dig1
-
-    index = 11
-    cpf.each_char do |numero|
-      soma2 += numero.to_i * index
-      break if index == 2
-
-      index -= 1
+    somadig1 = dig1.sum
+    mod1 = 11 - (somadig1 % 11)
+    cpf.zip(11.downto(2).to_a) do |num, multi|
+      num = num.to_i
+      multi = multi.to_i
+      if multi > 2
+        dig2 << num * multi
+      elsif multi == 2
+        modt = mod1 if mod1 <= 9
+        dig2 << modt * multi
+      end
     end
-    dig2 = 11 - (soma2 % 11)
-    return false if dig2 > 9 && cpf.chars[-1].to_i != 0 || dig2 <= 9 && cpf.chars[-1].to_i != dig2
+    somadig2 = dig2.sum
+    mod2 = 11 - (somadig2 % 11)
+    return true if (mod1 > 9 && cpf[-2] == '0' || mod1 <= 9 && cpf[-2] == mod1.to_s) &&
+                   (mod2 > 9 && cpf[-1] == '0' || mod2 <= 9 && cpf[-1] == mod2.to_s)
 
-    true
+    false
   end
 end

@@ -18,7 +18,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_28_162446) do
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.string "name", null: false
-    t.integer "cpf", null: false
+    t.string "cpf", null: false
     t.boolean "admin", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
