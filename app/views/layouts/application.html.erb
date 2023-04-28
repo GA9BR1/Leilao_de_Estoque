@@ -14,7 +14,16 @@
       <%= link_to root_path do %>
         <h2>Leilão do Desenvolvedor</h2>
       <% end %>
+      <ul>
+        <% if user_signed_in? %>
+          <li><%= button_to 'Sair', destroy_user_session_path, method: :delete%></li>
+        <% else %>
+          <li><%= button_to 'Entrar', new_user_session_path, method: :get%></li>
+        <% end %>
+      </ul>
     </nav>
+    <%= notice %>
+    <%= alert %>
     <%= yield %>
   </body>
 </html>
