@@ -1,24 +1,5 @@
-# README
+# Leilão de Estoque
+Essa é uma aplicação de um sistema de leilões de um estoque antigo, com produtos que já saíram de linha, ou que possuem pequenos defeitos.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Versão do Ruby -> 3.2.1
+* Versão do Rails -> 7.0.4.3
