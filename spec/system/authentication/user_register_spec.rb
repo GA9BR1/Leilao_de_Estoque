@@ -4,8 +4,9 @@ describe 'Usuário tenta se registrar' do
   it 'com sucesso' do
     visit root_path
 
-    click_on 'Entrar'
-    
+    within 'nav' do
+      click_on 'Entrar'
+    end
     click_on 'Cadastrar-se'
     expect(page).to have_content('Cadastrar-se')
 
