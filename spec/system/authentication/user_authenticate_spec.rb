@@ -2,10 +2,10 @@ require 'rails_helper'
 
 describe 'Usuário tenta se autenticar' do
   it 'com sucesso' do
-    User.create!(email: 'gustavoalberttodev@gmail.com', name: 'Gustavo Alberto', password: 'password', cpf: '70575930152')
+    User.create!(email: 'gustavoalberttodev@gmail.com', name: 'Gustavo Alberto', password: 'password', cpf: '73896923080')
     visit root_path
 
-    within 'nav' do
+    within 'form' do
       click_on 'Entrar'
     end
     within 'form#new_user' do
