@@ -1,0 +1,11 @@
+<h3>Remover itens do lote</h3>
+<%= form_with(model: @batch_item, url: batch_items_path, method: :delete, html: {id: 'remove_items'}) do |f| %>
+  <div>
+    <%= f.label :ids %>
+    <%= f.collection_select :ids, @batch_items, :id, ->(item) { "#{item.item.registration_code} - #{item.item.name}" }, {}, {multiple: true, data: {controller: 'slim'}}%>
+  </div>
+  <div>
+    <%= f.hidden_field :batch_id, value: @batch.id %>
+    <%= f.submit 'Remover' %>
+  </div>
+<% end %>

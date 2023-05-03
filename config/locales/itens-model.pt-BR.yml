@@ -17,3 +17,8 @@ pt-BR:
           dimensions: Dimensões
         item_category:
            name: Nome
+        batch: 
+          start_date: 'Data de início'
+          end_date: 'Data do término'
+          minimum_bid_difference: 'Diferença mínima entre lances'
+          minimum_bid: 'Lance mínimo'

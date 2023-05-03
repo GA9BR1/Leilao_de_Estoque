@@ -100,6 +100,9 @@ GEM
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
+    importmap-rails (1.1.6)
+      actionpack (>= 6.0.0)
+      railties (>= 6.0.0)
     io-console (0.6.0)
     irb (1.6.4)
       reline (>= 0.3.0)
@@ -196,6 +199,8 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     sqlite3 (1.6.2-x86_64-linux)
+    stimulus-rails (1.2.1)
+      railties (>= 6.0.0)
     thor (1.2.1)
     timeout (0.3.2)
     tzinfo (2.0.6)
@@ -217,12 +222,14 @@ DEPENDENCIES
   debug
   devise
   image_processing (~> 1.2)
+  importmap-rails (~> 1.1)
   mini_magick
   puma (~> 5.0)
   rails (~> 7.0.4, >= 7.0.4.3)
   rspec-rails
   sprockets-rails
   sqlite3 (~> 1.4)
+  stimulus-rails
   tzinfo-data
 
 RUBY VERSION

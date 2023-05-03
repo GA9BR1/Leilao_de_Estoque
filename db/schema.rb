@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_29_134349) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_03_183131) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -37,6 +37,29 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_29_134349) do
     t.integer "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "batch_items", force: :cascade do |t|
+    t.integer "batch_id", null: false
+    t.integer "item_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["batch_id"], name: "index_batch_items_on_batch_id"
+    t.index ["item_id"], name: "index_batch_items_on_item_id"
+  end
+
+  create_table "batches", force: :cascade do |t|
+    t.string "code"
+    t.date "start_date"
+    t.date "end_date"
+    t.decimal "minimum_bid_difference"
+    t.integer "created_by_id", null: false
+    t.integer "approved_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "minimum_bid"
+    t.index ["approved_by_id"], name: "index_batches_on_approved_by_id"
+    t.index ["created_by_id"], name: "index_batches_on_created_by_id"
   end
 
   create_table "item_categories", force: :cascade do |t|
@@ -77,5 +100,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_29_134349) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "batch_items", "batches"
+  add_foreign_key "batch_items", "items"
+  add_foreign_key "batches", "users", column: "approved_by_id"
+  add_foreign_key "batches", "users", column: "created_by_id"
   add_foreign_key "items", "item_categories"
 end

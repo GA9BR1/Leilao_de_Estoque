@@ -7,6 +7,8 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application" %>
+    <%= javascript_importmap_tags %>
+    <link href="https://unpkg.com/slim-select@latest/dist/slimselect.css" rel="stylesheet"></link>
   </head>
 
   <body>
@@ -20,6 +22,7 @@
             <li><%= link_to 'Cadastrar Categoria', new_item_category_path %></li>
             <li><%= link_to 'Cadastrar Item', new_item_path %></li>
             <li><%= link_to 'Itens Cadastrados', items_path %></li>
+            <li><%= link_to 'Cadastrar Lote', new_batch_path %></li>
           <% end %>
           <li><%= button_to 'Sair', destroy_user_session_path, method: :delete%></li>
         <% else %>

@@ -1,0 +1,17 @@
+<h1>Lote <%= @batch.code %></h1>
+
+<h3>Itens no lote</h3>
+<% if !@batch_items.empty? %>
+  <ul>
+    <% @batch_items.each do |item|%>
+      <li><%= item.item.registration_code %> - <%= item.item.name %></li>
+    <% end %>
+   </ul>   
+<% else %>
+  <p>Não existem itens no lote</p>
+<% end %>
+<% if @batch.approved_by.nil? %>
+  <%= render 'batch_items/new' %>
+  <%= render 'batch_items/destroy' %>
+  <%= button_to 'Aprovar Lote', approve_batch_path(@batch.id), method: :patch %>
+<% end %>

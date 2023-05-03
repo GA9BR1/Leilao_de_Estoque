@@ -1,0 +1,31 @@
+<h1>Cadastrar lote</h1>
+<% if @batch.errors.any? %>
+  <p>Verifique os erros abaixo: </p>
+  <ul>
+    <% @batch.errors.full_messages.each do |msg| %>
+      <li> <%= msg %> </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= form_with(model: @batch) do |f| %>
+  <div>
+    <%= f.label :start_date %>
+    <%= f.date_field :start_date %>
+  </div>
+  <div>
+    <%= f.label :end_date %>
+    <%= f.date_field :end_date %>
+  </div>
+  <div>
+    <%= f.label :minimum_bid %>
+    <%= f.number_field :minimum_bid, step: '0.5'%>
+  </div>
+  <div>
+    <%= f.label :minimum_bid_difference %>
+    <%= f.number_field :minimum_bid_difference, step: '0.5'%>
+  </div>
+  <div>
+    <%= f.submit 'Enviar' %>
+  </div>
+<% end %>
