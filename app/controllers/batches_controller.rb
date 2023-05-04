@@ -1,5 +1,9 @@
 class BatchesController < ApplicationController
-  before_action :authenticate_admin!
+  before_action :authenticate_admin!, only: [:new, :create, :approve, :index]
+  def index
+    @batches = Batch.all
+  end
+
   def show
     @batch_item = BatchItem.new
     @batch = Batch.find(params[:id])

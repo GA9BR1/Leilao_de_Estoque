@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Usuário tenta criar um lote' do
+describe 'Usuário(adm) tenta criar um lote' do
   it 'com sucesso' do
     user = User.create!(email: 'gustavo@leilaodogalpao.com.br', name: 'Gustavo Alberto', password: 'password', cpf: '73896923080')
     login_as(user)

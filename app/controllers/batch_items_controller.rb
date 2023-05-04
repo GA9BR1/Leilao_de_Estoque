@@ -1,10 +1,11 @@
 class BatchItemsController < ApplicationController
   before_action :authenticate_admin!
-  
+  before_action :check_if_batch_valid
+
   def create
     batch_id = params[:batch_item][:batch_id]
-    check_if_batch_valid(batch_id)
     item_ids = params[:batch_item][:item_ids]
+
     objects = []
     item_ids.delete_at(0)
 
@@ -18,14 +19,18 @@ class BatchItemsController < ApplicationController
 
     if objects.all?(&:valid?)
       objects.each(&:save)
-      return redirect_to batch_path(batch_id), notice: 'Item adicionado com sucesso'
+      if objects.count > 1
+        flash.notice = 'Itens adicionados com sucesso'
+      else
+        flash.notice = 'Item adicionado com sucesso'
+      end
+      return redirect_to batch_path(batch_id)
     end
     redirect_to batch_path(batch_id), notice: 'Não foi possível adicionar o item'
   end
 
   def delete_many
     batch_id = params[:batch_item][:batch_id]
-    check_if_batch_valid(batch_id)
     batch_ids = params[:batch_item][:ids]
     batch_ids.delete_at(0)
     if batch_ids.empty?
@@ -33,7 +38,12 @@ class BatchItemsController < ApplicationController
     end
 
     if BatchItem.where(id: batch_ids).destroy_all
-      return redirect_to batch_path(batch_id), notice: 'Item removido com sucesso'
+      if batch_ids.length > 1
+        flash.notice = 'Itens removidos com sucesso'
+      else
+        flash.notice = 'Item removido com sucesso'
+      end
+      return redirect_to batch_path(batch_id)
     end
 
     redirect_to batch_path(batch_id), notice: 'Não foi possivel remover o item'
@@ -45,8 +55,9 @@ class BatchItemsController < ApplicationController
     params.require(:batch_item).permit(:batch_id, item_ids: [], ids: [])
   end
 
-  def check_if_batch_valid(batch_id)
-    unless Batch.find(batch_id).approved_by.nil?
+  def check_if_batch_valid
+    batch_id = params[:batch_item][:batch_id]
+    if Batch.find(batch_id).approved_by.present?
       return redirect_to batch_path(batch_id), notice: 'Não é possível mais adicionar ou remover itens, pois o lote já foi aprovado'
     end
   end

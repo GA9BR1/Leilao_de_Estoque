@@ -1,4 +1,9 @@
 <h1>Lote <%= @batch.code %></h1>
+<% if @batch.approved_by %>
+  <p>Status: Aprovado</p>
+<% else %>
+  <p>Status: Aguardando aprovação</p>
+<% end %>
 
 <h3>Itens no lote</h3>
 <% if !@batch_items.empty? %>
@@ -15,3 +20,9 @@
   <%= render 'batch_items/destroy' %>
   <%= button_to 'Aprovar Lote', approve_batch_path(@batch.id), method: :patch %>
 <% end %>
+<ul>
+  <li><%= Batch.human_attribute_name(:start_date) %>: <%= @batch.start_date %></li>
+  <li><%= Batch.human_attribute_name(:end_date) %>: <%= @batch.end_date %></li>
+  <li><%= Batch.human_attribute_name(:minimum_bid) %>: <%= @batch.minimum_bid %></li>
+  <li><%= Batch.human_attribute_name(:minimum_bid_difference) %>: <%= @batch.minimum_bid_difference %></li>
+</ul>

@@ -1,0 +1,13 @@
+<section>
+<% unless @batches.nil? %>
+  <ul>
+    <% @batches.each do |batch| %>
+      <li>
+        <%= link_to batch.code, batch_path(batch.id) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Não existem lotes cadastrados</p>
+<% end %>
+</section>

@@ -1,5 +1,5 @@
 <h3>Adicionar itens ao lote</h3>
-<%= form_with(model: @batch_item, url: batch_items_path) do |f| %>
+<%= form_with(model: @batch_item, url: batch_items_path, html: {id: 'add_items'}) do |f| %>
   <div>
     <%= f.label :item_ids %>
     <%= f.collection_select :item_ids, @items_without_batch, :id, ->(item) { "#{item.registration_code} - #{item.name}" }, {}, {multiple: true, data: {controller: 'slim'}}%>

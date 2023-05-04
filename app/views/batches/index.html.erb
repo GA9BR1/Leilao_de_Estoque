@@ -1,0 +1,26 @@
+<h1>Lotes Cadastrados</h1>
+<section>
+  <% unless @batches.nil? %>
+    <ul>
+      <% @batches.each do |batch| %>
+        <li>
+          <div>
+            <ul>
+              <li>
+                <%= link_to batch.code, batch_path(batch.id) %>
+              </li>
+              <% unless batch.approved_by %>
+                <li>Status: Aguardando Aprovação</li>
+              <% else %>
+                <li>Status: Aprovado</li>
+              <% end %>
+              <li>Data de início: <%= batch.start_date %></li>
+            </ul>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>Nâo existem lotes cadastrados</p>
+  <% end %>
+</section>
