@@ -11,7 +11,6 @@ User.create!(email: 'gustavo@leilaodogalpao.com.br', name: 'Gustavo Alberto', pa
 User.create!(email: 'joao@leilaodogalpao.com.br', name: 'João Almeida', password: 'password', cpf: '93053597012')
 
 
-
 # As imagens estão aparecendo sem resize com o seeed, porém no upload da imagem elas sobem no resize correto
 
 image_file = File.open("#{Rails.root}/images/download.jpg")
