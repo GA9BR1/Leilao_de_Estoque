@@ -1,13 +1,5 @@
+<%= turbo_frame_tag "batches" do %>
 <section>
-<% unless @batches.nil? %>
-  <ul>
-    <% @batches.each do |batch| %>
-      <li>
-        <%= link_to batch.code, batch_path(batch.id) %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>Não existem lotes cadastrados</p>
-<% end %>
+  <%= render '/batches/tabs' %>
 </section>
+<% end %>

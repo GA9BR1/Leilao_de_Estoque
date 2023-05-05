@@ -39,6 +39,16 @@ class BatchesController < ApplicationController
     redirect_to batch_path(batch.id), notice: 'Você mesmo não pode aprovar o lote'
   end
 
+  def in_progress
+    @batches = Batch.where('start_date <= ? AND end_date >= ? AND approved_by_id IS NOT NULL', Date.today, Date.today)
+    render partial: 'batches/in_progress', locals: { batches: @batches }
+  end
+
+  def future
+    @batches = Batch.where('start_date > ? AND approved_by_id IS NOT NULL', Date.today)
+    render partial: 'batches/future', locals: { batches: @batches }
+  end
+
   private 
 
   def batch_params

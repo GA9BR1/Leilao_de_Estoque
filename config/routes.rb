@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :item_categories, only: [:new, :create, :edit, :update]
   resources :batches, only: [:new, :create, :show, :index] do
     patch 'approve', on: :member
+    get 'in_progress', on: :collection
+    get 'future', on: :collection
   end
   resources :batch_items, only: [:create]
   delete 'batch_items', to: 'batch_items#delete_many'

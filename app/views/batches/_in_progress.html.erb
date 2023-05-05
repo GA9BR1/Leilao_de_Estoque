@@ -1,0 +1,12 @@
+<%= turbo_frame_tag "batches" do %>
+  <%= render 'tabs' %>
+  <% if batches.present? %>
+    <ul>
+      <% batches.each do |batch| %>
+        <li><%= link_to batch.code, batch_path(batch.id), "data-turbo-frame": "_top"%></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>Não há leilões em andamento</p>
+  <% end %>
+<% end %>

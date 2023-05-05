@@ -6,19 +6,12 @@
 <% end %>
 
 <h3>Itens no lote</h3>
-<% if !@batch_items.empty? %>
-  <ul>
-    <% @batch_items.each do |item|%>
-      <li><%= item.item.registration_code %> - <%= item.item.name %></li>
-    <% end %>
-   </ul>   
+<% if @batch_items.present? %>
+  <ul id="batch_items">
+    <%= render @batch.batch_items %>
+  </ul>
 <% else %>
-  <p>Não existem itens no lote</p>
-<% end %>
-<% if @batch.approved_by.nil? %>
-  <%= render 'batch_items/new' %>
-  <%= render 'batch_items/destroy' %>
-  <%= button_to 'Aprovar Lote', approve_batch_path(@batch.id), method: :patch %>
+  <p>Nâo existem itens no lote</p>
 <% end %>
 <ul>
   <li><%= Batch.human_attribute_name(:start_date) %>: <%= @batch.start_date %></li>
@@ -26,3 +19,9 @@
   <li><%= Batch.human_attribute_name(:minimum_bid) %>: <%= @batch.minimum_bid %></li>
   <li><%= Batch.human_attribute_name(:minimum_bid_difference) %>: <%= @batch.minimum_bid_difference %></li>
 </ul>
+<button onclick="window.history.back()">Voltar</button>
+<% if @batch.approved_by.nil? %>
+  <%= render 'batch_items/new' %>
+  <%= render 'batch_items/destroy' %>
+  <%= button_to 'Aprovar Lote', approve_batch_path(@batch.id), method: :patch %>
+<% end %>
