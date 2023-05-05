@@ -10,4 +10,5 @@ Rails.application.routes.draw do
   end
   resources :batch_items, only: [:create]
   delete 'batch_items', to: 'batch_items#delete_many'
+  resources :bids, only: [:new, :create]
 end

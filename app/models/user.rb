@@ -7,7 +7,7 @@ class User < ApplicationRecord
   validates :cpf, cpf: { message: 'inválido' }
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-
+  has_many :bids
   private
 
   def verificar_email_admin

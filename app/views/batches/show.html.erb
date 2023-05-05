@@ -19,6 +19,41 @@
   <li><%= Batch.human_attribute_name(:minimum_bid) %>: <%= @batch.minimum_bid %></li>
   <li><%= Batch.human_attribute_name(:minimum_bid_difference) %>: <%= @batch.minimum_bid_difference %></li>
 </ul>
+
+
+<% if @batch.approved_by %>
+  <% if @batch.start_date >= Date.today %>
+    <% if @batch.end_date > Date.today %>
+      <h3>Lances </h3>
+      <% if @batch.bids.present? %>
+        <ul>
+          <% @batch.bids.each do |bid| %>
+            <div>
+              <h4>Lance #<%= @batch.bids.index(bid) + 1 %></h3>
+              <dl>
+                <dt>Valor: </dt>
+                <dd><%= bid.amount %></dd>
+                <dt>Autor: </dt>
+                <dd><%= bid.user.name %></dd>
+                <dt>Dia e horário: </dt>
+                <dd><%= bid.updated_at %></dd>
+              </dl>
+            </div>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>Ainda não há lances realizados</p>
+      <% end %>
+      <h3>Realizar um lance</h3>
+      <%= link_to 'Realizar um lance', new_bid_path(batch_id: @batch.id) %>
+    <% else %>
+      <p>O leilão já terminou</p>
+    <% end %>
+  <% else %>
+    <p>O leilão ainda não iniciou</p>
+  <% end %>
+<% end %>
+
 <button onclick="window.history.back()">Voltar</button>
 <% if @batch.approved_by.nil? %>
   <%= render 'batch_items/new' %>

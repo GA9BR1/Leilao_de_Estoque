@@ -3,6 +3,7 @@ class Batch < ApplicationRecord
   belongs_to :approved_by, class_name: 'User', optional: true
   has_many :items, through: :batch_items
   has_many :batch_items
+  has_many :bids
   validates :start_date, :end_date, :minimum_bid_difference, :minimum_bid, presence: true
   validates :code, uniqueness: true
   before_validation :generate_code, on: :create
