@@ -1,0 +1,11 @@
+<div id="<%= dom_id bid %>">
+  <h4>Lance #<%= bid.batch.bids.index(bid) + 1 %></h3>
+  <dl>
+    <dt>Valor: </dt>
+    <dd><%= bid.amount %></dd>
+    <dt>Autor: </dt>
+    <dd><%= bid.user.name %></dd>
+    <dt>Dia e horário: </dt>
+    <dd><%= bid.updated_at %></dd>
+  </dl>
+</div>

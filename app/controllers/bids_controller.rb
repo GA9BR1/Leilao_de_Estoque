@@ -1,6 +1,7 @@
 class BidsController < ApplicationController
   before_action :authenticate_user!
   def create
+    puts params
     @bid = Bid.new(bid_params)
     @bid.user_id = current_user.id
     if @bid.valid?
@@ -16,7 +17,11 @@ class BidsController < ApplicationController
         else
           if @bid.amount >= (@bid.batch.bids.maximum(:amount) + @bid.batch.minimum_bid_difference)
             @bid.save!
-            return redirect_to batch_path(@bid.batch_id), notice: 'Lance realizado com sucesso'
+            respond_to do |format|
+              format.turbo_stream
+              format.html { redirect_to @bid.batch }
+            end
+            return
           else
             flash[:notice] = 'O valor do lance deve ser maior que o valor do ultimo lance + a diferença mínima entre lances'
             return redirect_to batch_path(@bid.batch_id)
@@ -28,8 +33,8 @@ class BidsController < ApplicationController
   end
 
   def new
-    @bid = Bid.new
-    @batch_id = params[:batch_id]
+    @batch = Batch.find(params[:batch_id])
+    @bid = @batch.bids.new
   end
 
   def bid_params

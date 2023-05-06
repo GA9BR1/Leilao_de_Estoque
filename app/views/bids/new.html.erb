@@ -1,10 +1,12 @@
-<%= form_with(model: @bid) do |f| %>
-  <div>
-    <%= f.label :amount %>
-    <%= f.number_field :amount, step: '0.5'%>
-  </div>
-    <%= f.hidden_field :batch_id, value: @batch_id %>
-  <div>
-    <%= f.submit 'Fazer lance!' %>
-  </div>
+<%= turbo_frame_tag "new_bid", target: "_top" do %>
+  <%= form_with(model: [@bid.batch, @bid]) do |f| %>
+    <div>
+      <%= f.label :amount %>
+      <%= f.number_field :amount, step: '0.5'%>
+    </div>
+      <%= f.hidden_field :batch_id, value: @bid.batch.id %>
+    <div>
+      <%= f.submit 'Fazer lance!' %>
+    </div>
+  <% end %>
 <% end %>

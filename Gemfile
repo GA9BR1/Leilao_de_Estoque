@@ -22,7 +22,7 @@ gem 'hotwire-rails'
 gem "devise"
 gem "image_processing", '~> 1.2'
 gem "mini_magick"
-
+gem "redis"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -38,3 +38,6 @@ end
 
 
 gem "importmap-rails", "~> 1.1"
+
+# Use Redis for Action Cable
+
