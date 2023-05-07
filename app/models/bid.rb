@@ -1,8 +1,15 @@
 class Bid < ApplicationRecord
-  include ActionView::RecordIdentifier
   belongs_to :user
   belongs_to :batch
   validates :user_id, :batch_id, :amount, presence: true
-  after_create_commit -> { broadcast_append_to "batch"}
+  after_create_commit :remove_no_bids_if_first_bid
 
+  def remove_no_bids_if_first_bid
+    if self.batch.bids.count == 1
+      broadcast_remove_to "batch", target: 'no_bids'
+      broadcast_append_to "batch"
+    else
+      broadcast_append_to "batch"
+    end
+  end
 end

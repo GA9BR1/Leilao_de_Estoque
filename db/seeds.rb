@@ -9,7 +9,7 @@ video_card_category = ItemCategory.create!(name: 'Placas de Vídeo')
 processor_category = ItemCategory.create!(name: 'Processador')
 User.create!(email: 'gustavo@leilaodogalpao.com.br', name: 'Gustavo Alberto', password: 'password', cpf: '73896923080')
 User.create!(email: 'joao@leilaodogalpao.com.br', name: 'João Almeida', password: 'password', cpf: '93053597012')
-
+User.create!(email: 'leticia@gmail.com ', name: 'Letícia Alcantara', password: 'password', cpf: '61492939048')
 
 # As imagens estão aparecendo sem resize com o seeed, porém no upload da imagem elas sobem no resize correto
 

@@ -13,7 +13,7 @@ pt-BR:
           height: Altura
           depth: Profundidade
           item_category_id: Categoria
-          registration_number: Código
+          registration_code: Código
           dimensions: Dimensões
         item_category:
            name: Nome
@@ -22,3 +22,8 @@ pt-BR:
           end_date: 'Data do término'
           minimum_bid_difference: 'Diferença mínima entre lances'
           minimum_bid: 'Lance mínimo'
+        bid: 
+          amount: 'Valor'
+        batch_item:
+          item_ids: 'Itens a serem adicionados'
+          ids: 'Itens a serem removidos'

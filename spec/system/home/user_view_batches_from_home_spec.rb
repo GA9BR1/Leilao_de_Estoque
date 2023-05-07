@@ -6,8 +6,7 @@ describe 'Usuário/visitante tenta ver lotes a partir da página inicial' do
     click_on 'Leilões em andamento'
     expect(page).to have_content('Não existem leilões em andamento')
   end
-
-  it 'e vê leilão em andamento com sucesso' do
+  it 'e vê leilão em andamento com sucesso', selenium: true do
     video_card_category = ItemCategory.create!(name: 'Placas de Vídeo')
     processor_category = ItemCategory.create!(name: 'Processador')
 
@@ -19,7 +18,7 @@ describe 'Usuário/visitante tenta ver lotes a partir da página inicial' do
 
     image_file2 = File.open("#{Rails.root}/spec/system/items/imgs/ryzen-9-7950X3D.jpg")
     item2 = Item.new(name: 'AMD Ryzen 9 7950X3D', description: 'Processador AMD Ryzen 9 7950X3D, 5.7GHz Max Turbo, Cache 144MB, AM5, 16 Núcleos, Vídeo Integrado - 100-100000908WOF',
-                     weight: 100, width: 3, height: 3, depth: 1, item_category_id: processor_category.id)
+                    weight: 100, width: 3, height: 3, depth: 1, item_category_id: processor_category.id)
     item2.image.attach(io: image_file2, filename: 'ryzen-9-7950X3D.jpg')
     item2.save!
 
@@ -34,13 +33,11 @@ describe 'Usuário/visitante tenta ver lotes a partir da página inicial' do
     batch.save
 
     visit root_path
-    click_on 'Leilões em andamento'
     click_on batch.code
     expect(page).to have_content("#{item.registration_code} - #{item.name}")
     expect(page).to have_content("#{item2.registration_code} - #{item2.name}")
     expect(page).to have_content('Status: Aprovado')
   end
-
   it 'e vê leilão futuro com sucesso' do
     video_card_category = ItemCategory.create!(name: 'Placas de Vídeo')
     processor_category = ItemCategory.create!(name: 'Processador')

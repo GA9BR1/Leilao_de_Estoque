@@ -1,0 +1,6 @@
+pt-BR:
+  status:
+    label: Status
+    waiting_approve: Aguardando Aprovação
+    approved: Aprovado
+  no_batches_registered: "Não existem lotes cadastrados"

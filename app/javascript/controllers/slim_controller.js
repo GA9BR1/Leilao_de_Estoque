@@ -9,7 +9,10 @@ export default class extends Controller {
       settings: {
         placeholderText: 'Selecione os itens',
         closeOnSelect: false,
-        hideSelected: true
+        hideSelected: true,
+        searchText: 'Sem resultados',
+        searchPlaceholder: 'Digite o código ou nome do item',
+        searchHighlight: true
       }
     })
   }

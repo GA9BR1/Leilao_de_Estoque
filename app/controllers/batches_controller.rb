@@ -5,6 +5,10 @@ class BatchesController < ApplicationController
   end
 
   def show
+    unless current_user
+      store_location_for(:user, batch_path(params[:id]))
+    end
+
     @batch_item = BatchItem.new
     @batch = Batch.find(params[:id])
     @batch_items = BatchItem.where(batch_id: @batch.id)
@@ -40,7 +44,7 @@ class BatchesController < ApplicationController
   end
 
   def in_progress
-    @batches = Batch.where('start_date <= ? AND end_date >= ? AND approved_by_id IS NOT NULL', Date.today, Date.today)
+    @batches = Batch.where('start_date <= ? AND end_date > ? AND approved_by_id IS NOT NULL', Date.today, Date.today)
     render partial: 'batches/in_progress', locals: { batches: @batches }
   end
 

@@ -1,6 +1,6 @@
 <h1>Lotes Cadastrados</h1>
 <section>
-  <% unless @batches.nil? %>
+  <% if @batches.present? %>
     <ul>
       <% @batches.each do |batch| %>
         <li>
@@ -10,17 +10,17 @@
                 <%= link_to batch.code, batch_path(batch.id) %>
               </li>
               <% unless batch.approved_by %>
-                <li>Status: Aguardando Aprovação</li>
+                <li><%= t('status.label') %>: <%= t('status.waiting_approve') %></li>
               <% else %>
-                <li>Status: Aprovado</li>
+                <li><%= t('status.label') %>: <%= t('status.approved') %></li>
               <% end %>
-              <li>Data de início: <%= batch.start_date %></li>
+              <li><%= Batch.human_attribute_name(:start_date) %>: <%= batch.start_date %></li>
             </ul>
           </div>
         </li>
       <% end %>
     </ul>
   <% else %>
-    <p>Nâo existem lotes cadastrados</p>
+    <p><%= t('no_batches_registered') %></p>
   <% end %>
 </section>

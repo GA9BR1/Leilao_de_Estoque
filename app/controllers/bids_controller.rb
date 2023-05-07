@@ -1,22 +1,27 @@
 class BidsController < ApplicationController
   before_action :authenticate_user!
+  
   def create
-    puts params
     @bid = Bid.new(bid_params)
     @bid.user_id = current_user.id
     if @bid.valid?
       if @bid.batch.approved_by.present? && @bid.batch.start_date <= Date.today && @bid.batch.end_date > Date.today
         if @bid.batch.bids.empty?
-          if @bid.amount >= @bid.batch.minimum_bid 
+          if @bid.amount >= @bid.batch.minimum_bid
             @bid.save!
-            return redirect_to batch_path(@bid.batch_id), notice: 'Lance realizado com sucesso'
+            respond_to do |format|
+              format.turbo_stream
+              format.html { redirect_to @bid.batch }
+            end
+            return
           else
             flash[:notice] = 'O valor do lance inicial deve ser igual ou superior o valor do lance mínimo'
-            redirect_to batch_path(@bid.batch_id)
+            return redirect_to batch_path(@bid.batch_id)
           end
         else
           if @bid.amount >= (@bid.batch.bids.maximum(:amount) + @bid.batch.minimum_bid_difference)
             @bid.save!
+            flash.now[:alert] = 'Lance realizado com sucesso'
             respond_to do |format|
               format.turbo_stream
               format.html { redirect_to @bid.batch }
@@ -29,7 +34,7 @@ class BidsController < ApplicationController
         end
       end
     end
-    return redirect_to batch_path(@bid.batch_id), notice: 'Não foi possível realizar o lance'
+    redirect_to batch_path(@bid.batch_id), notice: 'Não foi possível realizar o lance'
   end
 
   def new

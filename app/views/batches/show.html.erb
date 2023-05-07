@@ -1,3 +1,4 @@
+
 <%= turbo_stream_from 'batch' %>
 
 <h1>Lote <%= @batch.code %></h1>
@@ -27,15 +28,18 @@
   <% if @batch.start_date <= Date.today %>
     <% if @batch.end_date > Date.today %> 
       <h3>Lances </h3>
-      <% if @batch.bids.present? %>
-        <ul id="bids">
-          <%= render @batch.bids %>
-        </ul>
-      <% else %>
-        <p>Ainda não há lances realizados</p>
-      <% end %>
+      <ul id="bids">
+        <%= render @batch.bids %>
+        <% if @batch.bids.empty? %>
+          <p id='no_bids'>Ainda não existem lances nesse lote</p>
+        <% end %>
+      </ul>
       <h3>Realizar um lance</h3>
-      <%= turbo_frame_tag "new_bid", src: new_batch_bid_path(@batch), target: "_top"%>
+      <% if user_signed_in? %>
+        <%= turbo_frame_tag "new_bid", src: new_batch_bid_path(@batch), target: "_top"%>
+      <% else %>
+        <p><%= link_to 'Faça login', new_user_session_path(redirect_to: request.original_url)%> para realizar um lance</p>
+      <% end %>
     <% else %>
       <p>O leilão já terminou</p>
     <% end %>
@@ -50,3 +54,4 @@
   <%= render 'batch_items/destroy' %>
   <%= button_to 'Aprovar Lote', approve_batch_path(@batch.id), method: :patch %>
 <% end %>
+
