@@ -1,0 +1,43 @@
+<% if current_user.bids.present? %>
+  <% @batches.order(end_date: :desc).each do |batch| %>
+    <dl>
+      <dt>Código</dt>
+      <dd><%= link_to batch.code, batch_path(batch.id)%></dd>
+      <dt>Data de término</dt>
+      <dd><%= l(batch.end_date) %></dd>
+      <dt>Status final</dt>
+      <dd><%= t("activerecord.enums.batch.end_status.#{batch.end_status}") %></dd>
+      <dt>Resultado</dt>
+      <% if batch.end_status != 'pending' %>
+        <dd>
+          <% if batch.bids.find_by(amount: batch.bids.maximum(:amount)).user_id == current_user.id %>
+            Ganhador
+          <% else %>
+            Perdedor
+          <% end %>
+        </dd>
+      <% else %>
+        <dd>
+          <dd>
+            <% if batch.bids.find_by(amount: batch.bids.maximum(:amount)).user_id == current_user.id %>
+              Vencendo
+            <% else %>
+              Perdendo
+            <% end %>
+          </dd>
+        </dd>
+      <% end %>
+      <dt>Categoria de itens</dt>
+      <dd>
+      <% batch.batch_items.each_with_index do |batch_item, index| %>
+        <span><%= batch_item.item.item_category.name %></span>
+        <% if index < (batch.batch_items.length - 1) %>
+          ,
+        <% end %>
+      <% end %>
+      </dd>
+    </dl>
+  <% end %>
+<% else %>
+  <p>Você ainda não realizou nenhum lance em nenhum lote</p>
+<% end %>

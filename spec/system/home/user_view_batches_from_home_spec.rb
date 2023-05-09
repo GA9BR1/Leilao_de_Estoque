@@ -66,7 +66,7 @@ describe 'Usuário/visitante tenta ver lotes a partir da página inicial' do
 
     visit root_path
     click_on 'Leilões futuros'
-    click_on batch.code
+    click_on "#{batch.code}"
     expect(page).to have_content("#{item.registration_code} - #{item.name}")
     expect(page).to have_content("#{item2.registration_code} - #{item2.name}")
     expect(page).to have_content('Status: Aprovado')

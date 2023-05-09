@@ -35,9 +35,9 @@ describe 'Usuário tenta se registrar' do
       click_on 'Cadastrar-se'
     end
 
-    expect(page).to have_content('Nome está vazia')
+    expect(page).to have_content('Nome não pode ficar em branco')
     expect(page).to have_content('CPF inválido')
-    expect(page).to have_content('E-mail está vazia')
-    expect(page).to have_content('Senha está vazia')
+    expect(page).to have_content('E-mail não pode ficar em branco')
+    expect(page).to have_content('Senha não pode ficar em branco')
   end
 end

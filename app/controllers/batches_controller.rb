@@ -1,5 +1,6 @@
 class BatchesController < ApplicationController
-  before_action :authenticate_admin!, only: [:new, :create, :approve, :index]
+  before_action :authenticate_admin!, only: [:new, :create, :approve, :index, :cancel, :close]
+
   def index
     @batches = Batch.all
   end
@@ -11,8 +12,13 @@ class BatchesController < ApplicationController
 
     @batch_item = BatchItem.new
     @batch = Batch.find(params[:id])
-    @batch_items = BatchItem.where(batch_id: @batch.id)
+    @batch_items = @batch.batch_items
     @items_without_batch = Item.where.not(id: BatchItem.select(:item_id))
+                                     .or(Item.where(id: BatchItem.joins(:batch)
+                                     .where(batches: { end_status: :canceled })
+                                     .where.not(item_id: BatchItem.joins(:batch)
+                                     .where.not(batches: { end_status: :canceled })
+                                     .select(:item_id))))
   end
 
   def new
@@ -29,6 +35,10 @@ class BatchesController < ApplicationController
     render :new
   end
 
+  def expired
+    @batches = Batch.where('end_date <= ?', Date.today)
+  end
+
   def approve
     id = params[:id]
     batch = Batch.find(id)
@@ -43,9 +53,28 @@ class BatchesController < ApplicationController
     redirect_to batch_path(batch.id), notice: 'Você mesmo não pode aprovar o lote'
   end
 
-  def in_progress
-    @batches = Batch.where('start_date <= ? AND end_date > ? AND approved_by_id IS NOT NULL', Date.today, Date.today)
-    render partial: 'batches/in_progress', locals: { batches: @batches }
+  def batches_with_my_bids
+    @batches = Batch.joins(:bids).where(bids: { user_id: current_user.id })
+  end
+
+  def cancel
+    batch = Batch.find(params[:id])
+    if batch.approved_by.present? && Date.today >= batch.end_date && batch.bids.empty?
+      batch.canceled!
+      redirect_to expired_batches_path, notice: 'Lote cancelado com sucesso'
+    else
+      redirect_to expired_batches_path, notice: 'Não foi possível cancelar o lote'
+    end
+  end
+
+  def close
+    batch = Batch.find(params[:id])
+    if batch.approved_by.present? && Date.today >= batch.end_date && batch.bids.present?
+      batch.closed!
+      redirect_to expired_batches_path, notice: 'Lote concluído com sucesso'
+    else
+      redirect_to expired_batches_path, notice: 'Não foi possível concluir o lote'
+    end
   end
 
   def future
@@ -53,7 +82,12 @@ class BatchesController < ApplicationController
     render partial: 'batches/future', locals: { batches: @batches }
   end
 
-  private 
+  def in_progress
+    @batches = Batch.where('start_date <= ? AND end_date > ? AND approved_by_id IS NOT NULL', Date.today, Date.today)
+    render partial: 'batches/in_progress', locals: { batches: @batches }
+  end
+
+  private
 
   def batch_params
     params.require(:batch).permit(:start_date, :end_date, :minimum_bid_difference, :minimum_bid)

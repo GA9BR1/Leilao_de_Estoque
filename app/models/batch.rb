@@ -1,4 +1,9 @@
 class Batch < ApplicationRecord
+  enum end_status: {
+    pending: 0,
+    closed: 1,
+    canceled: 2
+  }
   belongs_to :created_by, class_name: 'User'
   belongs_to :approved_by, class_name: 'User', optional: true
   has_many :items, through: :batch_items

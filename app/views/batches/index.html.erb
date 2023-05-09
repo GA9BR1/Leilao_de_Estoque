@@ -14,7 +14,7 @@
               <% else %>
                 <li><%= t('status.label') %>: <%= t('status.approved') %></li>
               <% end %>
-              <li><%= Batch.human_attribute_name(:start_date) %>: <%= batch.start_date %></li>
+              <li><%= Batch.human_attribute_name(:start_date) %>: <%= l(batch.start_date) %></li>
             </ul>
           </div>
         </li>

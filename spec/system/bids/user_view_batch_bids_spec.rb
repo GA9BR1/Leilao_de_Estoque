@@ -81,7 +81,7 @@ describe 'Usuário tenta ver os lances' do
     click_on 'Leilões em andamento'
     click_on batch.code
 
-    expect(page).to have_content('Ainda não há lances realizados')
+    expect(page).to have_content('Ainda não existem lances nesse lote')
   end
 
   it 'e não está autenticado, atuentica-se, volta para a página e consegue dar lances', selenium: true do

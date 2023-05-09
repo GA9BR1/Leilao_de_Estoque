@@ -3,6 +3,12 @@ pt-BR:
     models:
       item: Item
       item_category: Categoria do Item
+    enums:
+      batch:
+        end_status:
+          pending: Pendente
+          closed: Concluído
+          canceled: Cancelado
     attributes:
         item:
           name: Nome
@@ -27,3 +33,8 @@ pt-BR:
         batch_item:
           item_ids: 'Itens a serem adicionados'
           ids: 'Itens a serem removidos'
+  pluralize:
+    batch:
+      one: lote
+      other: lotes
+      

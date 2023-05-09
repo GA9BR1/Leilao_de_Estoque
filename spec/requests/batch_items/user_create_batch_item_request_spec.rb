@@ -79,4 +79,37 @@ describe 'Usuário tenta adicionar um item de lote' do
     expect(response).to redirect_to(batch_path(batch.id))
     expect(BatchItem.count).to eq(1)
   end
+
+  it 'e falso quando usuário tenta adicionar um item que não está disponível' do
+    user = User.create!(email: 'gustavo@leilaodogalpao.com.br', name: 'Gustavo Alberto', password: 'password', cpf: '73896923080')
+    batch = Batch.create!(start_date: Date.today, end_date: 7.day.from_now, minimum_bid_difference: 30, created_by_id: user.id, minimum_bid: 100)
+    image_file = File.open("#{Rails.root}/spec/system/items/imgs/download.jpg")
+    video_card_category = ItemCategory.create!(name: 'Placa de Vídeo')
+    item = Item.new(name: 'AMD Radeon HD7970 3GB Saphire', description: 'Placa de vídeo para computador',
+                    weight: 3500, width: 25, height: 6, depth: 11, item_category_id: video_card_category.id)
+    item.image.attach(io: image_file, filename: 'download.jpg')
+    item.save
+
+    login_as(user)
+    post(batch_items_path, params: { batch_item: { batch_id: batch.id, item_ids: ['', '2'] } })
+    expect(response).to redirect_to(batch_path(batch.id))
+    expect(BatchItem.count).to eq(0)
+  end
+
+  it 'e falso quando usuário tenta adicionar um item que não está disponível #2' do
+    user = User.create!(email: 'gustavo@leilaodogalpao.com.br', name: 'Gustavo Alberto', password: 'password', cpf: '73896923080')
+    batch = Batch.create!(start_date: Date.today, end_date: 7.day.from_now, minimum_bid_difference: 30, created_by_id: user.id, minimum_bid: 100)
+    image_file = File.open("#{Rails.root}/spec/system/items/imgs/download.jpg")
+    video_card_category = ItemCategory.create!(name: 'Placa de Vídeo')
+    item = Item.new(name: 'AMD Radeon HD7970 3GB Saphire', description: 'Placa de vídeo para computador',
+                    weight: 3500, width: 25, height: 6, depth: 11, item_category_id: video_card_category.id)
+    item.image.attach(io: image_file, filename: 'download.jpg')
+    item.save
+    BatchItem.create!(batch_id: batch.id, item_id: item.id)
+
+    login_as(user)
+    post(batch_items_path, params: { batch_item: { batch_id: batch.id, item_ids: ['', '1'] } })
+    expect(response).to redirect_to(batch_path(batch.id))
+    expect(BatchItem.count).to eq(1)
+  end
 end

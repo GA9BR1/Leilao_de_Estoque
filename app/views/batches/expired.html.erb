@@ -1,0 +1,77 @@
+<p><%= @batches.count %>  <%= t('pluralize.batch', count: @batches.count) %> <%= t('pluralize.expired', count: @batches.count) %>
+ <%= t('pluralize.found', count: @batches.count) %>. <%= @batches.pending.count %> <%= t('pluralize.need', count: @batches.count) %> de ações</p>
+
+<h3>Pendentes de ação</h3>
+<% if @batches.pending.present? %>
+  <ul>
+    <% @batches.pending.order(end_date: :desc).each do |batch| %>
+      <dl>
+        <dt><%= Batch.human_attribute_name(:code) %></dt>
+        <dd><%= link_to batch.code, batch_path(batch.id)%></dd>
+        <dt><%= Batch.human_attribute_name(:end_date) %></dt>
+        <dd><%= l(batch.end_date) %></dd>
+        <dt>Categoria de itens</dt>
+        <dd>
+        <% batch.batch_items.each_with_index do |batch_item, index| %>
+          <span><%= batch_item.item.item_category.name %></span>
+          <% if index < (batch.batch_items.length - 1) %>
+            ,
+          <% end %>
+        <% end %>
+        </dd>
+      </dl>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Não há leilões pendentes de ação</p>
+<% end %>
+
+<h3>Concluídos</h3>
+<% if @batches.closed.present? %>
+  <ul>
+    <% @batches.closed.order(end_date: :desc).each do |batch|%>
+      <dl>
+        <dt><%= Batch.human_attribute_name(:code) %></dt>
+        <dd><%= link_to batch.code, batch_path(batch.id)%></dd>
+        <dt><%= Batch.human_attribute_name(:end_date) %></dt>
+        <dd><%= l(batch.end_date) %></dd>
+        <dt>Categoria de itens</dt>
+        <dd>
+        <% batch.batch_items.each_with_index do |batch_item, index| %>
+          <span><%= batch_item.item.item_category.name %></span>
+          <% if index < (batch.batch_items.length - 1) %>
+            ,
+          <% end %>
+        <% end %>
+        </dd>
+      </dl>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Não há leilões concluídos</p>
+<% end %>
+
+<h3>Cancelados</h3>
+<% if @batches.canceled.present? %>
+  <ul>
+    <% @batches.canceled.order(end_date: :desc).each do |batch|%>
+      <dl>
+        <dt><%= Batch.human_attribute_name(:code) %></dt>
+        <dd><%= link_to batch.code, batch_path(batch.id)%></dd>
+        <dt><%= Batch.human_attribute_name(:end_date) %></dt>
+        <dd><%= l(batch.end_date) %></dd>
+        <dt>Categoria de itens</dt>
+        <dd>
+        <% batch.batch_items.each_with_index do |batch_item, index| %>
+          <span><%= batch_item.item.item_category.name %></span>
+          <% if index < (batch.batch_items.length - 1) %>
+            ,
+          <% end %>
+        <% end %>
+        </dd>
+      </dl>
+    <% end %>
+  </ul>
+<% else %>
+ <p>Não há leilões cancelados</p>
+<% end %>
