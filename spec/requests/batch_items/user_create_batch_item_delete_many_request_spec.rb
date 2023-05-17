@@ -14,7 +14,7 @@ describe 'Usuário deletar itens do lote' do
 
     login_as(user)
     delete(batch_items_path, params: { batch_item: { batch_id: batch.id, ids: ['', '1'] } })
-    expect(response).to redirect_to(batch_path(batch.id))
+    expect(response).to redirect_to(show_admin_batch_path(batch.id))
     expect(BatchItem.count).to eq(0)
   end
 
@@ -80,7 +80,7 @@ describe 'Usuário deletar itens do lote' do
     login_as(user)
   
     delete(batch_items_path, params: { batch_item: { batch_id: batch.id, ids: ['', '1', '2'] } })
-    expect(response).to redirect_to(batch_path(batch.id))
+    expect(response).to redirect_to(show_admin_batch_path(batch.id))
     expect(BatchItem.count).to eq(2)
   end
 end

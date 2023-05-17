@@ -109,7 +109,9 @@ describe 'Usuário tenta ver os lances' do
     click_on batch.code
 
     expect(page).to have_content('Faça login para realizar um lance')
-    click_on 'Faça login'
+    within 'p#do_login_bid' do
+      click_on 'Faça login'
+    end
     fill_in 'E-mail', with: 'leticia@gmail.com'
     fill_in 'Senha', with: 'password'
     within 'form#new_user' do

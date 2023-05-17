@@ -1,5 +1,5 @@
 class BatchesController < ApplicationController
-  before_action :authenticate_admin!, only: [:new, :create, :approve, :index, :cancel, :close]
+  before_action :authenticate_admin!, only: [:new, :create, :approve, :index, :cancel, :close, :show_admin]
 
   def index
     @batches = Batch.all
@@ -21,6 +21,22 @@ class BatchesController < ApplicationController
                                      .select(:item_id))))
   end
 
+  def show_admin
+    unless current_user
+      store_location_for(:user, show_admin_batch_path(params[:id]))
+    end
+
+    @batch_item = BatchItem.new
+    @batch = Batch.find(params[:id])
+    @batch_items = @batch.batch_items
+    @items_without_batch = Item.where.not(id: BatchItem.select(:item_id))
+                                     .or(Item.where(id: BatchItem.joins(:batch)
+                                     .where(batches: { end_status: :canceled })
+                                     .where.not(item_id: BatchItem.joins(:batch)
+                                     .where.not(batches: { end_status: :canceled })
+                                     .select(:item_id))))
+  end
+
   def new
     @batch = Batch.new
   end
@@ -29,7 +45,7 @@ class BatchesController < ApplicationController
     @batch = Batch.new(batch_params)
     @batch.created_by = current_user
     if @batch.save
-      return redirect_to batch_path(@batch.id), notice: 'Lote cadastrado com sucesso.'
+      return redirect_to show_admin_batch_path(@batch.id), notice: 'Lote cadastrado com sucesso.'
     end
     flash.now[:notice] = 'Não foi possível cadastrar o lote'
     render :new
@@ -44,17 +60,18 @@ class BatchesController < ApplicationController
     batch = Batch.find(id)
     if current_user != batch.created_by
       if batch.batch_items.count.zero?
-        return redirect_to batch_path(batch.id), notice: 'Você não pode aprovar um lote sem itens'
+        return redirect_to show_admin_batch_path(batch.id), notice: 'Você não pode aprovar um lote sem itens'
       end
       batch.approved_by = current_user
       batch.save
-      return redirect_to batch_path(batch.id), notice: 'Lote aprovado com sucesso'
+      return redirect_to show_admin_batch_path(batch.id), notice: 'Lote aprovado com sucesso'
     end
-    redirect_to batch_path(batch.id), notice: 'Você mesmo não pode aprovar o lote'
+    redirect_to show_admin_batch_path(batch.id), notice: 'Você mesmo não pode aprovar o lote'
   end
 
   def batches_with_my_bids
-    @batches = Batch.joins(:bids).where(bids: { user_id: current_user.id })
+    batch_ids = current_user.bids.pluck(:batch_id)
+    @batches = Batch.all.where(id: batch_ids).order(end_date: :desc)
   end
 
   def cancel

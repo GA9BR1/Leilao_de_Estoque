@@ -13,7 +13,7 @@ describe 'Usuário tenta adicionar um item de lote' do
 
     login_as(user)
     post(batch_items_path, params: { batch_item: { batch_id: batch.id, item_ids: ['', '1'] } })
-    expect(response).to redirect_to(batch_path(batch.id))
+    expect(response).to redirect_to(show_admin_batch_path(batch.id))
     expect(BatchItem.count).to eq(1)
   end
 
@@ -76,7 +76,7 @@ describe 'Usuário tenta adicionar um item de lote' do
     login_as(user)
   
     post(batch_items_path, params: { batch_item: { batch_id: batch.id, item_ids: ['', '2'] } })
-    expect(response).to redirect_to(batch_path(batch.id))
+    expect(response).to redirect_to(show_admin_batch_path(batch.id))
     expect(BatchItem.count).to eq(1)
   end
 
@@ -92,7 +92,7 @@ describe 'Usuário tenta adicionar um item de lote' do
 
     login_as(user)
     post(batch_items_path, params: { batch_item: { batch_id: batch.id, item_ids: ['', '2'] } })
-    expect(response).to redirect_to(batch_path(batch.id))
+    expect(response).to redirect_to(show_admin_batch_path(batch.id))
     expect(BatchItem.count).to eq(0)
   end
 
@@ -109,7 +109,7 @@ describe 'Usuário tenta adicionar um item de lote' do
 
     login_as(user)
     post(batch_items_path, params: { batch_item: { batch_id: batch.id, item_ids: ['', '1'] } })
-    expect(response).to redirect_to(batch_path(batch.id))
+    expect(response).to redirect_to(show_admin_batch_path(batch.id))
     expect(BatchItem.count).to eq(1)
   end
 end

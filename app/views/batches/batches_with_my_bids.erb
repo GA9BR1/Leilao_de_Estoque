@@ -1,5 +1,6 @@
+<h1>Lotes com lances meus</h1>
 <% if current_user.bids.present? %>
-  <% @batches.order(end_date: :desc).each do |batch| %>
+  <% @batches.each do |batch| %>
     <dl>
       <dt>Código</dt>
       <dd><%= link_to batch.code, batch_path(batch.id)%></dd>

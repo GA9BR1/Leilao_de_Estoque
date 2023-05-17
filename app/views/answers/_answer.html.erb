@@ -1,0 +1,9 @@
+<div id="<%= dom_id answer%>">
+  <h4><%= answer.user.name %>
+    <% if answer.user.admin %>
+      (Administrador)
+    <% end %>
+  </h4>
+  <p><%= answer.content %></p>
+  <p><%= l(answer.updated_at.in_time_zone("Brasilia"), format: :bids_format) %></p>
+</div>

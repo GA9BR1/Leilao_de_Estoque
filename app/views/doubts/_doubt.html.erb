@@ -1,0 +1,22 @@
+<div id="<%= dom_id doubt %>">
+  <h4><%= doubt.user.name %>
+    <% if doubt.user.admin %>
+      (Administrador)
+    <% end %>
+  </h4>
+  <p><%= doubt.content %></p>
+  <div data-controller="answers">
+    <button data-action="click->answers#toggleSection">Respostas</button>
+    <section id="answers_<%= doubt.id %>", data-answers-target="section", class="hidden">
+      <%= render doubt.answers %>
+      <% if doubt.answers.empty? %>
+        <p id="no_answers_<%=doubt.id%>">Ainda não existem respostas para essa dúvida</p>
+      <% end %>
+    </section>
+    <div class="hidden", data-answers-target="new_answer_form">
+    <% if Current.user %>
+      <%= turbo_frame_tag "new_answer_#{doubt.id}", src: new_batch_doubt_answer_path(doubt.batch.id, doubt.id), target: "new_answer_#{doubt.id}" %>
+    <% end %>
+    </div>
+  </div>
+</div>

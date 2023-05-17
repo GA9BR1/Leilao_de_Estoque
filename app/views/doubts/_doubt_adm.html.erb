@@ -1,0 +1,37 @@
+<div id="<%= dom_id doubt %>">
+  <h5>Lote <%= link_to doubt.batch.code, show_admin_batch_path(doubt.batch.id)%></h5>
+  <h4>
+    <% if doubt.visible %>
+      <%= turbo_frame_tag "name_ocult_toggle_#{doubt.id}", src: doubts_name_not_ocult_path(doubt.id) %>
+    <% else %>
+      <%= turbo_frame_tag "name_ocult_toggle_#{doubt.id}", src: doubts_name_ocult_path(doubt.id) %>
+    <% end %>
+  </h4>
+  <p><%= doubt.content %></p>
+  <p><%= l(doubt.updated_at.in_time_zone("Brasilia"), format: :bids_format) %></p>
+  <% if doubt.visible %>
+    <%= turbo_frame_tag "toggle_visibility_button_#{doubt.id}", src: doubts_visible_path(doubt.id) %>
+  <% else %>
+    <%= turbo_frame_tag "toggle_visibility_button_#{doubt.id}", src: doubts_not_visible_path(doubt.id) %>
+  <% end %>
+
+  <% if doubt.answered %>
+    <%= turbo_frame_tag "toggle_answered_button_#{doubt.id}", src: answered_button_checked_path(doubt.id) %>
+  <% else %>
+    <%= turbo_frame_tag "toggle_answered_button_#{doubt.id}", src: answered_button_unchecked_path(doubt.id) %>
+  <% end %>
+  
+
+  <div data-controller="answers">
+    <button data-action="click->answers#toggleSection">Respostas</button>
+    <section id="answers_<%= doubt.id %>", data-answers-target="section", class="hidden">
+      <%= render doubt.answers %>
+      <% if doubt.answers.empty? %>
+        <p id="no_answers_<%=doubt.id%>">Ainda não existem respostas para essa dúvida</p>
+      <% end %>
+    </section>
+    <div class="hidden", data-answers-target="new_answer_form">
+      <%= turbo_frame_tag "new_answer_#{doubt.id}", src: new_batch_doubt_answer_path(doubt.batch.id, doubt.id) %>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,3 @@
-
 <%= turbo_stream_from 'batch' %>
 
 <h1>Lote <%= @batch.code %></h1>
@@ -28,6 +27,28 @@
   <li><%= Batch.human_attribute_name(:minimum_bid_difference) %>: <%= @batch.minimum_bid_difference %></li>
 </ul>
 
+<h3>Dúvidas</h3>
+<ul id='doubts'>
+  <%= render @batch.doubts.visible %>
+  <% if @batch.doubts.visible.empty? %>
+    <p id='no_doubts'>Ainda não existem dúvidas nesse lote</p>
+  <% end %>
+</ul>
+
+
+<% if current_user %>
+  <% if @batch.approved_by %>
+    <% if Date.today < @batch.end_date || current_user.admin %>
+      <%= turbo_frame_tag "new_doubt", src: new_batch_doubt_path(@batch), target: "_top"%>
+    <% elsif Date.today >= @batch.end_date && @batch.bids.present? && @batch.bids.find_by(amount: @batch.bids.maximum(:amount)).user_id == current_user.id %>
+      <%= turbo_frame_tag "new_doubt", src: new_batch_doubt_path(@batch), target: "_top"%>
+    <% else %>
+      <p>Você não pode enviar mais dúvidas pois o leilão já acabou</p>
+    <% end %>
+  <% end %>
+<% else %>
+  <p id="do_login_doubt"><%= link_to 'Faça login', new_user_session_path(redirect_to: request.original_url)%> para enviar uma dúvida</p>
+<% end %>
 
 <% if @batch.approved_by %>
   <% if @batch.start_date <= Date.today %>
@@ -43,7 +64,7 @@
         <h3>Realizar um lance</h3>
         <%= turbo_frame_tag "new_bid", src: new_batch_bid_path(@batch), target: "_top"%>
       <% else %>
-        <p><%= link_to 'Faça login', new_user_session_path(redirect_to: request.original_url)%> para realizar um lance</p>
+        <p id="do_login_bid"><%= link_to 'Faça login', new_user_session_path(redirect_to: request.original_url)%> para realizar um lance</p>
       <% end %>
     <% else %>
       <h3>Lances </h3>
@@ -70,20 +91,3 @@
 <% end %>
 
 <button onclick="window.history.back()">Voltar</button>
-<% if @batch.approved_by.nil? %>
-  <%= render 'batch_items/new' %>
-  <%= render 'batch_items/destroy' %>
-  <%= button_to 'Aprovar Lote', approve_batch_path(@batch.id), method: :patch %>
-<% end %>
-
-<% if @batch.end_date <= Date.today && @batch.pending? && current_user %>
-  <% if current_user.admin %>
-    <% if @batch.bids.empty? %>
-      <p>O lote não recebeu nenhum lance, deseja cancelar?</p>
-      <%= button_to 'Cancelar lote', cancel_batch_path(@batch.id), method: :patch %>
-    <% else %>
-      <p>O lote recebeu pelo menos um lance, deseja concluir?</p>
-      <%= button_to 'Concluir leilão', close_batch_path(@batch.id), method: :patch %>
-    <% end %>
-  <% end %>
-<% end %>

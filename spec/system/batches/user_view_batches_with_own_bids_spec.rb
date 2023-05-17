@@ -47,13 +47,15 @@ describe 'Usuário tenta ver lotes que deu lance' do
     BatchItem.create!(batch_id: batch.id, item_id: item.id)
     batch.approved_by = user2
     batch.save!
+    
     Bid.create!(batch_id: batch.id, user_id: user2.id, amount: 100)
+    Bid.create!(batch_id: batch.id, user_id: user3.id, amount: 150)
     Bid.create!(batch_id: batch.id, user_id: user.id, amount: 200)
     batch.end_date = Date.today
     batch.save!
     batch.end_status = 'closed'
     batch.save!
-    login_as(user2)
+    login_as(user3)
     visit root_path
     click_on 'Lotes com lances meus'
     expect(page).to have_content('Perdedor')
@@ -77,10 +79,10 @@ describe 'Usuário tenta ver lotes que deu lance' do
     batch.approved_by = user2
     batch.save!
     Bid.create!(batch_id: batch.id, user_id: user2.id, amount: 100)
-    Bid.create!(batch_id: batch.id, user_id: user.id, amount: 200)
+    Bid.create!(batch_id: batch.id, user_id: user3.id, amount: 200)
     batch.end_date = Date.today
     batch.save!
-    login_as(user)
+    login_as(user3)
     visit root_path
     click_on 'Lotes com lances meus'
     expect(page).to have_content('Vencendo')
@@ -104,10 +106,11 @@ describe 'Usuário tenta ver lotes que deu lance' do
     batch.approved_by = user2
     batch.save!
     Bid.create!(batch_id: batch.id, user_id: user2.id, amount: 100)
+    Bid.create!(batch_id: batch.id, user_id: user3.id, amount: 150)
     Bid.create!(batch_id: batch.id, user_id: user.id, amount: 200)
     batch.end_date = Date.today
     batch.save!
-    login_as(user2)
+    login_as(user3)
     visit root_path
     click_on 'Lotes com lances meus'
     expect(page).to have_content('Perdendo')

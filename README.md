@@ -8,9 +8,10 @@ Essa é uma aplicação de um sistema de leilões de um estoque antigo, com prod
 * Versão do [Devise](#devise)                   ->  4.9.2
 * Versão do [ImageProcessing](#imageprocessing)          ->  1.2
 * Versão do [Mini Magick](#mini-magick)              ->  4.12.0
-* Versão do [Stimulus for Rails](#stimulus-for-rails)       ->  1.2.1
 * Versão do [Import Map](#import-map)               ->  1.1.6
 * Versão do [Slim Select](#rspec)              ->  2.4.5
+* Versão do [Hotwire Rails](#hotwire-rails)   -> 0.1.3
+* 
 
 ## Devise
 Solução para autenticação para o Rails baseado no Warden. [Documentação](https://github.com/heartcombo/devise)
@@ -30,8 +31,8 @@ Permite manipular imagens, como redimensionar, cortar, aplicar filtros, entre ou
 ## Import Map
 Permite importar módulos JavaScript. [Documentação](https://github.com/rails/importmap-rails)
 
-## Stimulus for Rails
-Framework JavaScript, é utilizado para "aumentar o HTML", é possível importar módulos JavaScript, criar componentes, entre diversas outras utilidades. [Documentação](https://github.com/hotwired/stimulus-rails)
-
 ## Slim Select
 Plugin para seleção de opções em formulários. Ele permite uma ótima personalização e melhor interatividade. [Documentação](https://slimselectjs.com/)
+
+## Hotwire Rails
+Conjunto de bibliotecas que permite construir interfaces web interativas e em tempo real de forma fácil e eficiente.[Documentação](https://hotwired.dev/)

@@ -5,7 +5,11 @@
       <% batches.each do |batch| %>
         <dl>
           <dt>Código</dt>
-          <dd><%= link_to batch.code, batch_path(batch.id), "data-turbo-frame": "_top"%></dd>
+          <% if current_user && current_user.admin %>
+            <dd><%= link_to batch.code, show_admin_batch_path(batch.id), "data-turbo-frame": "_top"%></dd>
+          <% else %>
+            <dd><%= link_to batch.code, batch_path(batch.id), "data-turbo-frame": "_top"%></dd>
+          <% end %>
           <dt>Categoria de itens</dt>
           <dd>
             <% batch.batch_items.each_with_index do |batch_item, index| %>

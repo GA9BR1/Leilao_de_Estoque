@@ -7,7 +7,7 @@
     <% @batches.pending.order(end_date: :desc).each do |batch| %>
       <dl>
         <dt><%= Batch.human_attribute_name(:code) %></dt>
-        <dd><%= link_to batch.code, batch_path(batch.id)%></dd>
+        <dd><%= link_to batch.code, show_admin_batch_path(batch.id)%></dd>
         <dt><%= Batch.human_attribute_name(:end_date) %></dt>
         <dd><%= l(batch.end_date) %></dd>
         <dt>Categoria de itens</dt>
@@ -32,7 +32,7 @@
     <% @batches.closed.order(end_date: :desc).each do |batch|%>
       <dl>
         <dt><%= Batch.human_attribute_name(:code) %></dt>
-        <dd><%= link_to batch.code, batch_path(batch.id)%></dd>
+        <dd><%= link_to batch.code, show_admin_batch_path(batch.id)%></dd>
         <dt><%= Batch.human_attribute_name(:end_date) %></dt>
         <dd><%= l(batch.end_date) %></dd>
         <dt>Categoria de itens</dt>
@@ -57,7 +57,7 @@
     <% @batches.canceled.order(end_date: :desc).each do |batch|%>
       <dl>
         <dt><%= Batch.human_attribute_name(:code) %></dt>
-        <dd><%= link_to batch.code, batch_path(batch.id)%></dd>
+        <dd><%= link_to batch.code, show_admin_batch_path(batch.id)%></dd>
         <dt><%= Batch.human_attribute_name(:end_date) %></dt>
         <dd><%= l(batch.end_date) %></dd>
         <dt>Categoria de itens</dt>

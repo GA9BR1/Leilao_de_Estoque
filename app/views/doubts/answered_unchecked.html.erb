@@ -1,0 +1,3 @@
+<%= turbo_frame_tag "toggle_answered_button_#{@id}", target: "_top" do %>
+   <%= button_to 'Marcar como respondida', set_doubt_answered_path(@id), id: "button_toggle_answered_#{@id}", method: :patch %>
+<% end %>

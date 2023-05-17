@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_07_210734) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_11_182244) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -37,6 +37,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_07_210734) do
     t.integer "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "answers", force: :cascade do |t|
+    t.string "content"
+    t.integer "doubt_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doubt_id"], name: "index_answers_on_doubt_id"
+    t.index ["user_id"], name: "index_answers_on_user_id"
   end
 
   create_table "batch_items", force: :cascade do |t|
@@ -71,6 +81,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_07_210734) do
     t.datetime "updated_at", null: false
     t.index ["batch_id"], name: "index_bids_on_batch_id"
     t.index ["user_id"], name: "index_bids_on_user_id"
+  end
+
+  create_table "doubts", force: :cascade do |t|
+    t.string "content"
+    t.integer "user_id", null: false
+    t.integer "batch_id", null: false
+    t.boolean "visible", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "answered", default: false
+    t.index ["batch_id"], name: "index_doubts_on_batch_id"
+    t.index ["user_id"], name: "index_doubts_on_user_id"
   end
 
   create_table "item_categories", force: :cascade do |t|
@@ -111,11 +133,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_07_210734) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "answers", "doubts"
+  add_foreign_key "answers", "users"
   add_foreign_key "batch_items", "batches"
   add_foreign_key "batch_items", "items"
   add_foreign_key "batches", "users", column: "approved_by_id"
   add_foreign_key "batches", "users", column: "created_by_id"
   add_foreign_key "bids", "batches"
   add_foreign_key "bids", "users"
+  add_foreign_key "doubts", "batches"
+  add_foreign_key "doubts", "users"
   add_foreign_key "items", "item_categories"
 end

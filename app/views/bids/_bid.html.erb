@@ -6,6 +6,6 @@
     <dt>Autor: </dt>
     <dd><%= bid.user.name %></dd>
     <dt>Dia e horário: </dt>
-    <dd><%= bid.updated_at %></dd>
+    <dd><%= l(bid.updated_at.in_time_zone("Brasilia"), format: :bids_format) %></dd>
   </dl>
 </div>

@@ -5,7 +5,7 @@ describe 'Usuário tenta criar uma lote' do
     user = User.create!(email: 'gustavo@leilaodogalpao.com.br', name: 'Gustavo Alberto', password: 'password', cpf: '73896923080')
     login_as(user)
     post(batches_path, params: {batch: {start_date: Date.today, end_date: 7.day.from_now, minimum_bid: 30, minimum_bid_difference: 50}})
-    expect(response).to redirect_to(batch_path(1))
+    expect(response).to redirect_to(show_admin_batch_path(1))
     expect(Batch.count).to eq(1)
   end
   it 'e não tem autorização' do

@@ -11,7 +11,7 @@ class BatchItemsController < ApplicationController
     item_ids.delete_at(0)
 
     if item_ids.empty? || batch_id.nil?
-      return redirect_to batch_path(batch_id), notice: 'Não foi possível adicionar o item'
+      return redirect_to show_admin_batch_path(batch_id), notice: 'Não foi possível adicionar o item'
     end
 
     item_ids.each do |itd|
@@ -25,9 +25,9 @@ class BatchItemsController < ApplicationController
       else
         flash.notice = 'Item adicionado com sucesso'
       end
-      return redirect_to batch_path(batch_id)
+      return redirect_to show_admin_batch_path(batch_id)
     end
-    redirect_to batch_path(batch_id), notice: 'Não foi possível adicionar o item'
+    redirect_to show_admin_batch_path(batch_id), notice: 'Não foi possível adicionar o item'
   end
 
   def delete_many
@@ -35,7 +35,7 @@ class BatchItemsController < ApplicationController
     item_ids = params[:batch_item][:ids]
     item_ids.delete_at(0)
     if item_ids.empty?
-      return redirect_to batch_path(batch_id), notice: 'Não foi possível remover o item'
+      return redirect_to show_admin_batch_path(batch_id), notice: 'Não foi possível remover o item'
     end
 
     if BatchItem.where(id: item_ids).destroy_all
@@ -44,10 +44,10 @@ class BatchItemsController < ApplicationController
       else
         flash.notice = 'Item removido com sucesso'
       end
-      return redirect_to batch_path(batch_id)
+      return redirect_to show_admin_batch_path(batch_id)
     end
 
-    redirect_to batch_path(batch_id), notice: 'Não foi possivel remover o item'
+    redirect_to show_admin_batch_path(batch_id), notice: 'Não foi possivel remover o item'
   end
 
   private
@@ -65,7 +65,7 @@ class BatchItemsController < ApplicationController
                              .pluck(:id)
 
     if item_ids.any? { |item_id| !available_item_ids.include?(item_id) }
-      return redirect_to batch_path(params[:batch_item][:batch_id]), notice: 'Um ou mais itens que você tentou adicionar não estão disponíveis'
+      return redirect_to show_admin_batch_path(params[:batch_item][:batch_id]), notice: 'Um ou mais itens que você tentou adicionar não estão disponíveis'
     end
   end
   
@@ -76,10 +76,10 @@ class BatchItemsController < ApplicationController
   def check_if_batch_valid
     batch_id = params[:batch_item][:batch_id]
     if batch_id.empty?
-      return redirect_to batch_path(batch_id), notice: 'Id do lote ausente'
+      return redirect_to show_admin_batch_path(batch_id), notice: 'Id do lote ausente'
     end
     if Batch.find(batch_id).approved_by.present?
-      return redirect_to batch_path(batch_id), notice: 'Não é possível mais adicionar ou remover itens, pois o lote já foi aprovado'
+      return redirect_to show_admin_batch_path(batch_id), notice: 'Não é possível mais adicionar ou remover itens, pois o lote já foi aprovado'
     end
   end
 

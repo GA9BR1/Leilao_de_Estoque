@@ -1,0 +1,13 @@
+<%= turbo_frame_tag "new_answer_#{@doubt.id}", target: "_top" do %>
+  <%= form_with(model: [@doubt.batch, @doubt, @answer],
+                data: {controller: 'utilities', action: "turbo:submit-end->utilities#reset"}) do |f| %>
+    <div>
+      <%= f.label :content, 'Resposta' %>
+      <%= f.text_area :content %>
+    </div>
+      <%= f.hidden_field :doubt_id, value: @answer.doubt.id %>
+    <div>
+      <%= f.submit 'Enviar' %>
+    </div>
+  <% end %>
+<% end %>

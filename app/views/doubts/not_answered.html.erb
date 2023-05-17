@@ -1,0 +1,9 @@
+<%= turbo_stream_from 'not_answered' %>
+
+<h2>Dúvidas não respondidas</h2>
+<div id='not_answereds'>
+  <%= render partial: 'doubt_adm', collection: @doubts, as: :doubt %>
+  <% if @doubts.empty? %>
+    <p id="no_doubts_open">Não há dúvidas em aberto</p>
+  <% end %>
+</div>

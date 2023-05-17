@@ -1,0 +1,12 @@
+<%= turbo_frame_tag "new_doubt", target: "_top" do %>
+  <%= form_with(model: [@doubt.batch, @doubt]) do |f| %>
+    <div>
+      <%= f.label :content %>
+      <%= f.text_area :content %>
+    </div>
+      <%= f.hidden_field :batch_id, value: @doubt.batch.id %>
+    <div>
+      <%= f.submit 'Enviar' %>
+    </div>
+  <% end %>
+<% end %>

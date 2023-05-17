@@ -1,0 +1,8 @@
+<%= turbo_frame_tag "name_ocult_toggle_#{@doubt.id}", target: "_top" do %>
+  <span>
+    <%= @doubt.user.name %>
+    <% if @doubt.user.admin %>
+      (Administrador)
+    <% end %>
+  </span>
+<% end %>

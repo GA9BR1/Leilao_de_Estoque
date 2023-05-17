@@ -33,6 +33,10 @@ pt-BR:
         batch_item:
           item_ids: 'Itens a serem adicionados'
           ids: 'Itens a serem removidos'
+        doubt:
+          content: 'Dúvida'
+        asnwer:
+          content: 'Resposta'
   pluralize:
     batch:
       one: lote

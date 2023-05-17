@@ -16,7 +16,11 @@ class BidsController < ApplicationController
             return
           else
             flash[:notice] = 'O valor do lance inicial deve ser igual ou superior o valor do lance mínimo'
-            return redirect_to batch_path(@bid.batch_id)
+            if current_user.admin
+              return redirect_to show_admin_batch_path(@bid.batch_id)
+            else
+              return redirect_to batch_path(@bid.batch_id)
+            end
           end
         else
           if @bid.amount >= (@bid.batch.bids.maximum(:amount) + @bid.batch.minimum_bid_difference)
@@ -24,17 +28,30 @@ class BidsController < ApplicationController
             flash.now[:alert] = 'Lance realizado com sucesso'
             respond_to do |format|
               format.turbo_stream
-              format.html { redirect_to @bid.batch }
+              if current_user.admin
+                format.html { redirect_to @bid.batch }
+                format.html { redirect_to show_admin_batch_path(@bid.batch_id) }
+              else
+                format.html { redirect_to @bid.batch }
+              end
             end
             return
           else
             flash[:notice] = 'O valor do lance deve ser maior que o valor do ultimo lance + a diferença mínima entre lances'
-            return redirect_to batch_path(@bid.batch_id)
+            if current_user.admin
+              return redirect_to show_admin_batch_path(@bid.batch_id)
+            else
+              return redirect_to batch_path(@bid.batch_id)
+            end
           end
         end
       end
     end
-    redirect_to batch_path(@bid.batch_id), notice: 'Não foi possível realizar o lance'
+    if current_user.admin
+      redirect_to show_admin_batch_path(@bid.batch_id)
+    else
+      redirect_to batch_path(@bid.batch_id), notice: 'Não foi possível realizar o lance'
+    end
   end
 
   def new
