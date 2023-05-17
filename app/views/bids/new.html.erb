@@ -5,6 +5,7 @@
       <%= f.number_field :amount, step: '0.5'%>
     </div>
       <%= f.hidden_field :batch_id, value: @bid.batch.id %>
+      <%= f.hidden_field :user_id, value: current_user.id %>
     <div>
       <%= f.submit 'Fazer lance!' %>
     </div>

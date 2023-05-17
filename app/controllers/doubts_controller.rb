@@ -9,19 +9,40 @@ class DoubtsController < ApplicationController
 
   def create
     @doubt = Doubt.new(doubt_params)
-    @doubt.user = current_user
-    
-    if @doubt.save
+
+    if current_user.id != @doubt.user_id
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_to @doubt.batch }
+        format.html { render :error_page, status: :unprocessable_entity }
       end
       return
     end
-    if current_user.admin
-      redirect_to show_admin_batch_path(@doubt.batch.id), notice: 'A dúvida deve ter um conteúdo'
-    else
-      redirect_to batch_path(@doubt.batch.id), notice: 'A dúvida deve ter um conteúdo'
+
+    approved_by = @doubt.batch.approved_by
+    start_date = @doubt.batch.start_date
+    end_date = @doubt.batch.end_date
+    bids_present = @doubt.batch.bids.present?
+    maximum_bid_amount = @doubt.batch.bids.maximum(:amount)
+
+    if (approved_by && Date.today < end_date && Date.today >= start_date) ||
+       (approved_by && Date.today >= end_date && bids_present && @doubt.batch.bids.find_by(amount: maximum_bid_amount).user_id == current_user.id)
+      if @doubt.save
+        respond_to do |format|
+          format.turbo_stream
+          format.html { redirect_to @doubt.batch }
+        end
+        return
+      else
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: turbo_stream.append("error-messages-doubt", partial: "shared/error_messages", locals: { resource: @doubt }) }
+          format.html { render :new, status: :unprocessable_entity }
+        end
+        return
+      end
+    end
+    respond_to do |format|
+      format.turbo_stream
+      format.html { render :error_page, status: :unprocessable_entity }
     end
   end
 
@@ -55,7 +76,7 @@ class DoubtsController < ApplicationController
   
 
   def doubt_params
-    params.require(:doubt).permit(:content, :batch_id)
+    params.require(:doubt).permit(:content, :batch_id, :user_id)
   end
 
   def set_answered

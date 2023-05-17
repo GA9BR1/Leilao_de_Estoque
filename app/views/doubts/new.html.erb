@@ -5,6 +5,7 @@
       <%= f.text_area :content %>
     </div>
       <%= f.hidden_field :batch_id, value: @doubt.batch.id %>
+      <%= f.hidden_field :user_id, value: current_user.id %>
     <div>
       <%= f.submit 'Enviar' %>
     </div>

@@ -6,7 +6,7 @@ class BatchesController < ApplicationController
   end
 
   def show
-    if !current_user.admin && !Batch.find(params[:id]).approved_by
+    if current_user && !current_user.admin && !Batch.find(params[:id]).approved_by
       redirect_to root_path, notice: 'Você não tem acesso a essa página'
     end
     unless current_user

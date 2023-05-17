@@ -40,8 +40,10 @@
   <% if @batch.approved_by %>
     <% if Date.today < @batch.end_date || current_user.admin %>
       <%= turbo_frame_tag "new_doubt", src: new_batch_doubt_path(@batch), target: "_top"%>
+      <div id="error-messages-doubt"></div>
     <% elsif Date.today >= @batch.end_date && @batch.bids.present? && @batch.bids.find_by(amount: @batch.bids.maximum(:amount)).user_id == current_user.id %>
       <%= turbo_frame_tag "new_doubt", src: new_batch_doubt_path(@batch), target: "_top"%>
+      <div id="error-messages-doubt"></div>
     <% else %>
       <p>Você não pode enviar mais dúvidas pois o leilão já acabou</p>
     <% end %>
@@ -62,6 +64,7 @@
       </ul>
       <% if user_signed_in?%>
         <h3>Realizar um lance</h3>
+        <div id="message-bid"></div>
         <%= turbo_frame_tag "new_bid", src: new_batch_bid_path(@batch), target: "_top"%>
       <% else %>
         <p id="do_login_bid"><%= link_to 'Faça login', new_user_session_path(redirect_to: request.original_url)%> para realizar um lance</p>

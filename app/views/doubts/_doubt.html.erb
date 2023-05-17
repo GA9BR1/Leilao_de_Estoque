@@ -14,6 +14,7 @@
       <% end %>
     </section>
     <div class="hidden", data-answers-target="new_answer_form">
+    <div id="error-messages-answer_<%=doubt.id%>"></div>
     <% if Current.user %>
       <%= turbo_frame_tag "new_answer_#{doubt.id}", src: new_batch_doubt_answer_path(doubt.batch.id, doubt.id), target: "new_answer_#{doubt.id}" %>
     <% end %>

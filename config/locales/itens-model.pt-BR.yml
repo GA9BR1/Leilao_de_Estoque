@@ -10,6 +10,8 @@ pt-BR:
           closed: Concluído
           canceled: Cancelado
     attributes:
+        answer:
+          content: Resposta
         item:
           name: Nome
           description: Descrição
@@ -29,14 +31,12 @@ pt-BR:
           minimum_bid_difference: 'Diferença mínima entre lances'
           minimum_bid: 'Lance mínimo'
         bid: 
-          amount: 'Valor'
+          amount: Valor
         batch_item:
-          item_ids: 'Itens a serem adicionados'
-          ids: 'Itens a serem removidos'
+          item_ids: Itens a serem adicionados
+          ids: Itens a serem removidos
         doubt:
-          content: 'Dúvida'
-        asnwer:
-          content: 'Resposta'
+          content: Dúvida
   pluralize:
     batch:
       one: lote
