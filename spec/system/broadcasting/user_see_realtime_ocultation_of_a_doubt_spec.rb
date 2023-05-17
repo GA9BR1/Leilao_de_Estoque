@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-describe 'Usuário tenta ver respotas para uma dúvida', selenium: true do
-  it 'e consegue com sucesso' do
+describe 'Usuário vê a ocultação em tempo real de uma dúvida no lote', selenium: true do
+  it 'com sucesso' do
     video_card_category = ItemCategory.create!(name: 'Placas de Vídeo')
 
     image_file = File.open("#{Rails.root}/spec/system/items/imgs/download.jpg")
@@ -17,33 +17,28 @@ describe 'Usuário tenta ver respotas para uma dúvida', selenium: true do
     batch.approved_by = user2
     batch.save!
     user3 = User.create!(email: 'leticia@gmail.com ', name: 'Letícia Alcantara', password: 'password', cpf: '61492939048')
-    login_as(user3)
-    doubt = Doubt.create!(user_id: user3.id, batch_id: batch.id, content: 'Olá onde é feita a retirada do lote ?')
-    answer = Answer.create!(user_id: user.id, doubt_id: doubt.id, content: 'Presencialmente em Tangará da Serra')
+    user4 = User.create!(email: 'lima@gmail.com ', name: 'João Lima', password: 'password', cpf: '04012209078')
+    login_as(user4)
+    doubt = Doubt.create!(user_id: user3.id, batch_id: batch.id, content: 'É FAKE!')
 
     visit root_path
-    click_on "Leilões em andamento"
+    click_on 'Leilões em andamento'
     click_on batch.code
     
-    sleep 0.4
-    within "div#doubt_#{doubt.id}" do
-      click_on 'Respostas'
-    end
-    expect(page).to have_content(answer.content)
+    sleep 0.5
+    expect(page).to have_content(doubt.content)
+    expect(page).to have_content(user3.name)
 
-    within "div#doubt_#{doubt.id}" do
-      click_on 'Respostas'
-    end
+    doubt.visible = false
+    doubt.save!
 
-    expect(page).not_to have_content(answer.content)
-    within "div#doubt_#{doubt.id}" do
-      click_on 'Respostas'
-    end
-
-    expect(page).to have_content(answer.content)
+    sleep 0.5
+    expect(page).not_to have_content(doubt.content)
+    expect(page).not_to have_content(user3.name)
+    expect(page).to have_content('Ainda não existem dúvidas nesse lote')
   end
 
-  it 'e consegue com sucesso(ADM)' do
+  it 'com sucesso(adm)' do
     video_card_category = ItemCategory.create!(name: 'Placas de Vídeo')
 
     image_file = File.open("#{Rails.root}/spec/system/items/imgs/download.jpg")
@@ -60,27 +55,21 @@ describe 'Usuário tenta ver respotas para uma dúvida', selenium: true do
     batch.save!
     user3 = User.create!(email: 'leticia@gmail.com ', name: 'Letícia Alcantara', password: 'password', cpf: '61492939048')
     login_as(user)
-    doubt = Doubt.create!(user_id: user3.id, batch_id: batch.id, content: 'Olá onde é feita a retirada do lote ?')
-    answer = Answer.create!(user_id: user2.id, doubt_id: doubt.id, content: 'Presencialmente em Tangará da Serra')
+    doubt = Doubt.create!(user_id: user3.id, batch_id: batch.id, content: 'É FAKE!')
 
     visit root_path
-    click_on "Leilões em andamento"
+    click_on 'Leilões em andamento'
     click_on batch.code
     
-    within "div#doubt_#{doubt.id}" do
-      click_on 'Respostas'
-    end
-    expect(page).to have_content(answer.content)
+    sleep 0.5
+    expect(page).to have_content(doubt.content)
+    expect(page).to have_content(user3.name)
 
-    within "div#doubt_#{doubt.id}" do
-      click_on 'Respostas'
-    end
+    doubt.visible = false
+    doubt.save!
 
-    expect(page).not_to have_content(answer.content)
-    within "div#doubt_#{doubt.id}" do
-      click_on 'Respostas'
-    end
-
-    expect(page).to have_content(answer.content)
+    sleep 0.5
+    expect(page).to have_content('Oculto')
+    expect(page).to have_content('Desocultar')
   end
 end

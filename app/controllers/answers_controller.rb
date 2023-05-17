@@ -12,20 +12,11 @@ class AnswersController < ApplicationController
     @answer.user = current_user
 
     if @answer.valid?
-      if @answer.user.admin == true
-        @answer.doubt.answered = true
-        @answer.doubt.save!
-      else
-        @answer.doubt.answered = false
-        @answer.doubt.save!
-      end
       @answer.save
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to @answer.doubt }
       end
-    else
-      
     end
   end
 

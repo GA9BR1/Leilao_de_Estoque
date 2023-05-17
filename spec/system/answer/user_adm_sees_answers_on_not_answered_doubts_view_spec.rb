@@ -18,7 +18,7 @@ describe 'Usuário(ADM) tenta ver dúvidas não respondidas', selenium: true do
     batch.save!
     user3 = User.create!(email: 'leticia@gmail.com ', name: 'Letícia Alcantara', password: 'password', cpf: '61492939048')
     doubt = Doubt.create!(user_id: user3.id, batch_id: batch.id, content: 'Olá onde é feita a retirada do lote ?')
-    answer = Answer.create!(doubt_id: doubt.id, user_id: user.id, content: 'Alguém me responde por favor')
+    answer = Answer.create!(doubt_id: doubt.id, user_id: user3.id, content: 'Alguém me responde por favor')
     login_as(user)
 
     visit root_path
@@ -59,8 +59,8 @@ describe 'Usuário(ADM) tenta ver dúvidas não respondidas', selenium: true do
     batch.save!
     user3 = User.create!(email: 'leticia@gmail.com ', name: 'Letícia Alcantara', password: 'password', cpf: '61492939048')
     doubt = Doubt.create!(user_id: user3.id, batch_id: batch.id, content: 'Olá onde é feita a retirada do lote ?')
-    answer = Answer.create!(doubt_id: doubt.id, user_id: user.id, content: 'Alguém me responde por favor')
-    answer2 = Answer.create!(doubt_id: doubt.id, user_id: user.id, content: '??????')
+    answer = Answer.create!(doubt_id: doubt.id, user_id: user3.id, content: 'Alguém me responde por favor')
+    answer2 = Answer.create!(doubt_id: doubt.id, user_id: user3.id, content: '??????')
     login_as(user)
 
     visit root_path

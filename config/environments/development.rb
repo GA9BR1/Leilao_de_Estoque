@@ -7,6 +7,10 @@ Rails.application.configure do
     Rails.application.config.active_storage.service = :test
     # ou outras configurações necessárias para o ambiente de testes
   end
+
+  if Rails.env == ''
+    Rails.application.config.active_storage.service = :development
+  end
   # Settings specified here will take precedence over those in config/application.rb.
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   # In the development environment your application's code is reloaded any time

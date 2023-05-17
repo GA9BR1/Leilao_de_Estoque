@@ -29,26 +29,6 @@ class DoubtsController < ApplicationController
     @doubts = Doubt.all.where(answered: false)
   end
 
-  def set_answered
-    doubt = Doubt.find(params[:id])
-    if doubt.answered == true
-      doubt.answered = false
-    else
-      doubt.answered = true
-    end
-    doubt.save!
-  end
-
-  def set_visiblity
-    doubt = Doubt.find(params[:id])
-    if doubt.visible == true
-      doubt.visible = false
-    else
-      doubt.visible = true
-    end
-    doubt.save!
-  end
-
   def name_ocult
     @doubt = Doubt.find(params[:id])
   end
@@ -78,6 +58,28 @@ class DoubtsController < ApplicationController
     params.require(:doubt).permit(:content, :batch_id)
   end
 
+  def set_answered
+    doubt = Doubt.find(params[:id])
+    if doubt.answered == true
+      doubt.answered = false
+    else
+      doubt.answered = true
+    end
+    doubt.save!
+  end
+
+  def set_visiblity
+    doubt = Doubt.find(params[:id])
+    if doubt.visible == true
+      doubt.visible = false
+    else
+      doubt.visible = true
+    end
+    doubt.save!
+  end
+
+  private 
+  
   def authenticate_admin!
     authenticate_user!
 

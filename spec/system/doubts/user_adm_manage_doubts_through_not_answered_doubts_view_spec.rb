@@ -25,6 +25,7 @@ describe 'Usuário(ADM) gerencia as dúvidas através da view de dúvidas não r
       visit root_path
       click_on 'Dúvidas em aberto'
      
+      sleep 0.5
       within "div#doubt_#{doubt.id}" do
         click_on 'Respostas'
         fill_in 'Resposta', with: 'Presencialmente em Tangará da Serra'
