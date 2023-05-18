@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   root to: 'home#index'
+  resources :user_favorite_batches, only: [:index]
   resources :items, only: [:new, :create, :index, :destroy, :edit, :update]
   resources :item_categories, only: [:new, :create, :edit, :update]
   resources :batches, only: [:new, :create, :show, :index] do
@@ -13,7 +14,6 @@ Rails.application.routes.draw do
     end
     get 'expired', on: :collection
     get 'batches_with_my_bids', on: :collection
-    patch 'approve', on: :member
     patch 'cancel', on: :member
     patch 'close', on: :member
   end
@@ -26,6 +26,9 @@ Rails.application.routes.draw do
   get 'doubts/:id/not_visible', to: 'doubts#not_visible', as: 'doubts_not_visible'
   get 'doubts/:id/name_not_ocult', to: 'doubts#name_not_ocult', as: 'doubts_name_not_ocult'
   get 'doubts/:id/name_ocult', to: 'doubts#name_ocult', as: 'doubts_name_ocult'
+  delete 'user_favorite_batches/delete_favorited/:id', to: 'user_favorite_batches#delete_favorited', as: 'user_favorited_batches_delete_favorited'
+  post 'user_favorite_batches/:user_id/:batch_id', to: 'user_favorite_batches#create', as: 'create_user_favorite_batch'
   patch 'doubts/:id/set_visibility', to: 'doubts#set_visiblity', as: 'set_doubt_visibility'
   delete 'batch_items', to: 'batch_items#delete_many'
+  patch 'batches/:batch_id/approve/:user_id', to: 'batches#approve', as: 'approve_batch'
 end

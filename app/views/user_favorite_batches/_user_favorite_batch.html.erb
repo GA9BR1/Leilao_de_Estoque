@@ -1,0 +1,21 @@
+<div>
+  <div id="toggle_favorite_button_<%="#{favorited_batch.batch_id}"%>">
+    <%= button_to 'Desfavoritar', user_favorited_batches_delete_favorited_path(favorited_batch.id), method: :delete%>
+  </div>
+  <% if favorited_batch.batch.end_date <= Date.today %>
+    <p>O leilão desse lote já acabou</p>
+  <% end %>
+  <dl>
+      <dt>Código</dt>
+      <dd><%= link_to favorited_batch.batch.code, batch_path(favorited_batch.batch.id)%></dd>
+      <dt>Categoria de itens</dt>
+      <dd>
+      <% favorited_batch.batch.batch_items.each_with_index do |batch_item, index| %>
+        <span><%= batch_item.item.item_category.name %></span>
+        <% if index < (favorited_batch.batch.batch_items.length - 1) %>
+          ,
+        <% end %>
+      <% end %>
+      </dd>
+    </dl>
+</div>

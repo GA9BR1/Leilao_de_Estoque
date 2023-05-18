@@ -28,6 +28,7 @@
             <li><%= link_to 'Lotes expirados', expired_batches_path %></li>
             <li><%= link_to 'Dúvidas em aberto', doubts_not_answered_path %></li>
           <% end %>
+            <li><%= link_to 'Favoritos', user_favorite_batches_path %></li>
             <% if !current_user.admin %>
               <li><%= link_to 'Lotes com lances meus', batches_with_my_bids_batches_path %></li>
             <% end %>

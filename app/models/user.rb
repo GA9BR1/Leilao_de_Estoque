@@ -7,6 +7,8 @@ class User < ApplicationRecord
   validates :cpf, cpf: { message: 'inválido' }
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  has_many :user_favorite_batches
+  has_many :batches, through: :user_favorite_batches
   has_many :bids
   has_many :doubts
   private

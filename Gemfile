@@ -1,3 +1,4 @@
+require 'open3'
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -23,6 +24,31 @@ gem "devise"
 gem "image_processing", '~> 1.2'
 gem "mini_magick"
 gem "redis"
+
+unless system("which redis-server > /dev/null 2>&1")
+    puts "Instalando o redis-server..."
+    stdout, stderr, status = Open3.capture3("sudo apt-get install redis-server")
+    puts stdout
+    puts stderr
+    raise "Erro ao instalar o redis-server" unless status.success?
+end
+
+unless system("which google-chrome-stable > /dev/null 2>&1")
+  puts "Instalando o Google Chrome..."
+  
+
+  system("wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb")
+
+  Open3.popen3("sudo dpkg -i google-chrome-stable_current_amd64.deb") do |stdin, stdout, stderr, wait_thr|
+    puts stdout.read
+    puts stderr.read
+    raise "Erro ao instalar o Google Chrome" unless wait_thr.value.success?
+  end
+  
+
+  system("sudo apt install -f")
+  File.delete("google-chrome-stable_current_amd64.deb")
+end
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

@@ -10,6 +10,7 @@ class Batch < ApplicationRecord
   has_many :batch_items
   has_many :bids
   has_many :doubts
+  has_many :users, through: :user_favorite_batches
   validates :start_date, :end_date, :minimum_bid_difference, :minimum_bid, presence: true
   validates :code, uniqueness: true
   before_validation :generate_code, on: :create

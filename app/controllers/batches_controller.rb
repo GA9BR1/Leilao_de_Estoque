@@ -13,8 +13,11 @@ class BatchesController < ApplicationController
       store_location_for(:user, batch_path(params[:id]))
     end
 
+    
     @batch_item = BatchItem.new
     @batch = Batch.find(params[:id])
+    @favorited = current_user&.user_favorite_batches&.exists?(batch_id: @batch.id)
+    @favorited_batch = current_user&.user_favorite_batches&.find_by(batch_id: @batch.id)
     @batch_items = @batch.batch_items
     @items_without_batch = Item.where.not(id: BatchItem.select(:item_id))
                                      .or(Item.where(id: BatchItem.joins(:batch)
@@ -31,6 +34,8 @@ class BatchesController < ApplicationController
 
     @batch_item = BatchItem.new
     @batch = Batch.find(params[:id])
+    @favorited = current_user&.user_favorite_batches&.exists?(batch_id: @batch.id)
+    @favorited_batch = current_user&.user_favorite_batches&.find_by(batch_id: @batch.id)
     @batch_items = @batch.batch_items
     @items_without_batch = Item.where.not(id: BatchItem.select(:item_id))
                                      .or(Item.where(id: BatchItem.joins(:batch)
@@ -46,12 +51,13 @@ class BatchesController < ApplicationController
 
   def create
     @batch = Batch.new(batch_params)
-    @batch.created_by = current_user
-    if @batch.save
-      return redirect_to show_admin_batch_path(@batch.id), notice: 'Lote cadastrado com sucesso.'
+    if current_user.id == @batch.created_by_id
+      if @batch.save
+        return redirect_to show_admin_batch_path(@batch.id), notice: 'Lote cadastrado com sucesso.'
+      end
+      flash.now[:notice] = 'Não foi possível cadastrar o lote'
+      render :new
     end
-    flash.now[:notice] = 'Não foi possível cadastrar o lote'
-    render :new
   end
 
   def expired
@@ -59,15 +65,20 @@ class BatchesController < ApplicationController
   end
 
   def approve
-    id = params[:id]
-    batch = Batch.find(id)
-    if current_user != batch.created_by
-      if batch.batch_items.count.zero?
-        return redirect_to show_admin_batch_path(batch.id), notice: 'Você não pode aprovar um lote sem itens'
+    user_id = params[:user_id]
+    batch = Batch.find(params[:batch_id])
+    if current_user.id.to_i == user_id.to_i
+      if Date.today >= batch.end_date
+        return redirect_to show_admin_batch_path(batch.id), notice: 'Você mesmo não pode aprovar um lote expirado'
       end
-      batch.approved_by = current_user
-      batch.save
-      return redirect_to show_admin_batch_path(batch.id), notice: 'Lote aprovado com sucesso'
+      if current_user.id != batch.created_by_id
+        if batch.batch_items.count.zero?
+          return redirect_to show_admin_batch_path(batch.id), notice: 'Você não pode aprovar um lote sem itens'
+        end
+        batch.approved_by_id = current_user.id
+        batch.save
+        return redirect_to show_admin_batch_path(batch.id), notice: 'Lote aprovado com sucesso'
+      end
     end
     redirect_to show_admin_batch_path(batch.id), notice: 'Você mesmo não pode aprovar o lote'
   end
@@ -110,7 +121,7 @@ class BatchesController < ApplicationController
   private
 
   def batch_params
-    params.require(:batch).permit(:start_date, :end_date, :minimum_bid_difference, :minimum_bid)
+    params.require(:batch).permit(:start_date, :end_date, :minimum_bid_difference, :minimum_bid, :created_by_id)
   end
 
   def authenticate_admin!

@@ -1,0 +1,9 @@
+<h1>Lotes favoritados</h1>
+
+<section>
+  <% if @user_favorite_batches.present? %>
+    <%= render partial: 'user_favorite_batches/user_favorite_batch', collection: @user_favorite_batches, as: :favorited_batch%>
+  <% else %>
+    <p>Você ainda não favoritou nenhum lote</p>
+  <% end %>
+</section>

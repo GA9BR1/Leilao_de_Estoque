@@ -25,6 +25,7 @@
     <%= f.label :minimum_bid_difference %>
     <%= f.number_field :minimum_bid_difference, step: '0.5'%>
   </div>
+    <%= f.hidden_field :created_by_id, value: current_user.id %>
   <div>
     <%= f.submit 'Enviar' %>
   </div>

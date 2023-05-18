@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_11_182244) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_17_192301) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -115,6 +115,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_11_182244) do
     t.index ["item_category_id"], name: "index_items_on_item_category_id"
   end
 
+  create_table "user_favorite_batches", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "batch_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["batch_id"], name: "index_user_favorite_batches_on_batch_id"
+    t.index ["user_id"], name: "index_user_favorite_batches_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -144,4 +153,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_11_182244) do
   add_foreign_key "doubts", "batches"
   add_foreign_key "doubts", "users"
   add_foreign_key "items", "item_categories"
+  add_foreign_key "user_favorite_batches", "batches"
+  add_foreign_key "user_favorite_batches", "users"
 end

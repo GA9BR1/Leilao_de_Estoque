@@ -1,0 +1,3 @@
+<div id="toggle_favorite_button_<%="#{batch_id}"%>">
+  <%= button_to 'Favoritar', create_user_favorite_batch_path(user_id: user_id, batch_id: batch_id), method: :post%>
+</div>
