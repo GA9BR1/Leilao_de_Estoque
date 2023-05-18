@@ -45,7 +45,6 @@ unless system("which google-chrome-stable > /dev/null 2>&1")
     raise "Erro ao instalar o Google Chrome" unless wait_thr.value.success?
   end
   
-
   system("sudo apt install -f")
   File.delete("google-chrome-stable_current_amd64.deb")
 end
