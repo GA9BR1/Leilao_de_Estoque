@@ -27,6 +27,11 @@ class BatchesController < ApplicationController
                                      .select(:item_id))))
   end
 
+  def search
+    @query = params[:query]
+    @batches = Batch.joins(batch_items: :item).where("(batches.code LIKE ? OR items.name LIKE ?) AND batches.approved_by_id IS NOT NULL", "%#{@query}%", "%#{@query}%")
+  end
+
   def show_admin
     unless current_user
       store_location_for(:user, show_admin_batch_path(params[:id]))

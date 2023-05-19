@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :items, only: [:new, :create, :index, :destroy, :edit, :update]
   resources :item_categories, only: [:new, :create, :edit, :update]
   resources :batches, only: [:new, :create, :show, :index] do
+    get 'search', on: :collection
     get 'admin', on: :member, to: 'batches#show_admin', as: 'show_admin'
     get 'in_progress', on: :collection
     get 'future', on: :collection

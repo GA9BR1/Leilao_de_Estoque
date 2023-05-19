@@ -1,0 +1,24 @@
+<% unless @batches.empty? %>
+  <p><%= @batches.count %> <%= t('pluralize.batch', count: @batches.count) %> <%= t('pluralize.found', count: @batches.count) %>. 
+  <% @batches.each do |batch| %>
+    <dl>
+      <dt>Código</dt>
+      <dd><%= link_to batch.code, batch_path(batch.id)%></dd>
+      <dt>Data de início</dt>
+      <dd><%= l(batch.start_date) %></dd>
+      <dt>Data de término</dt>
+      <dd><%= l(batch.end_date) %></dd>
+      <dt>Categoria de itens</dt>
+      <dd>
+      <% batch.batch_items.each_with_index do |batch_item, index| %>
+        <span><%= batch_item.item.item_category.name %></span>
+        <% if index < (batch.batch_items.length - 1) %>
+          ,
+        <% end %>
+      <% end %>
+      </dd>
+    </dl>
+  <% end %>
+<% else %>
+  <p>Nenhum lote foi encontrado</p>
+<% end %>

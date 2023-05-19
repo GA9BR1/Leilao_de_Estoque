@@ -30,6 +30,13 @@
             <li><%= link_to 'Bloquear ou desbloquear um CPF', block_and_unblock_cpf_page_path%></li>
           <% end %>
             <li><%= link_to 'Favoritos', user_favorite_batches_path %></li>
+            <li>
+              <%= form_with(url: search_batches_path, method: :get) do |f| %>
+                <%= f.label :query, 'Buscar lote'%>
+                <%= f.text_field :query %>
+                <%= f.submit 'Buscar' %>
+              <% end %>
+            </li>
             <% if !current_user.admin %>
               <li><%= link_to 'Lotes com lances meus', batches_with_my_bids_batches_path %></li>
             <% end %>
