@@ -1,0 +1,14 @@
+<section>
+  <h1>Bloquear ou desbloquear um CPF</h1>
+  <p>Digite o número do CPF e clique em enviar, se ele estiver bloqueado será desloqueado e vice-versa</p>
+
+  <%= form_with(url: block_user_cpf_in_page_path, method: :patch) do |f| %>
+    <div>
+      <%= f.label :cpf, 'CPF' %>
+      <%= f.number_field :cpf %>
+    </div>
+    <div>
+      <%= f.submit 'Enviar' %>
+    </div>
+  <% end %>
+</section>

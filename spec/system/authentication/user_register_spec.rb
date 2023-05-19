@@ -40,4 +40,26 @@ describe 'Usuário tenta se registrar' do
     expect(page).to have_content('E-mail não pode ficar em branco')
     expect(page).to have_content('Senha não pode ficar em branco')
   end
+
+  it 'com um cpf bloqueado' do
+    BlockedCpf.create!(cpf: 73896923080)
+    visit root_path
+
+    click_on 'Entrar'
+    
+    click_on 'Cadastrar-se'
+    expect(page).to have_content('Cadastrar-se')
+
+    within 'form#new_user' do
+      fill_in 'Nome', with: 'Gustavo Alberto'
+      fill_in 'E-mail', with: 'gustavoalberttodev@gmail.com'
+      fill_in 'CPF', with: 73896923080
+      fill_in 'Senha', with: 'password'
+      fill_in 'Confirme sua senha', with: 'password'
+      click_on 'Cadastrar-se'
+    end
+
+    expect(page).to have_content('CPF está bloqueado. Entre em contato com o suporte.')
+    expect(User.count).to eq(0)
+  end
 end

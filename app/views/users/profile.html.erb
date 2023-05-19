@@ -1,0 +1,23 @@
+<section>
+  <h1>Perfil do usuário</h1>
+  <dl>
+    <dt>Nome: </dt>
+    <dd><%= @user.name %></dd>
+    <dt>E-mail: </dt>
+    <dd><%= @user.email %></dd>
+    <dt>Cpf: </dt>
+    <dd><%= @user.cpf %></dd>
+    <dt>Desde: </dt>
+    <dd><%= l(@user.created_at.in_time_zone("Brasilia"), format: :bids_format) %></dd>
+  </dl> 
+    <% if @user.blocked_cpf? %>
+      <div id="toggle-cpf-block">
+        <%= button_to 'Desbloquear CPF', block_user_cpf_path(id: @user.id), method: :patch%>
+      </div>
+    <% else %>
+      <div id="toggle-cpf-block">
+        <%= button_to 'Bloquear CPF', block_user_cpf_path(id: @user.id), method: :patch%>
+      </div>
+    <% end %>
+    <p>OBS: Ao bloquear um CPF o usuário perderá o acesso a fazer lances, postar dúvidas ou respostas para as mesmas</p>
+</section>

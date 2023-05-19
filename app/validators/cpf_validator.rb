@@ -30,6 +30,7 @@ class CpfValidator < ActiveModel::EachValidator
   SIZE_VALIDATION = /^[0-9]{11}$/
 
   def cpf_valid?(cpf)
+    cpf = cpf.to_s
     return false unless cpf =~ SIZE_VALIDATION
 
     return false if DENY_LIST.include?(cpf)

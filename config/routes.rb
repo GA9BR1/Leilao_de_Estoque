@@ -31,4 +31,8 @@ Rails.application.routes.draw do
   patch 'doubts/:id/set_visibility', to: 'doubts#set_visiblity', as: 'set_doubt_visibility'
   delete 'batch_items', to: 'batch_items#delete_many'
   patch 'batches/:batch_id/approve/:user_id', to: 'batches#approve', as: 'approve_batch'
+  get 'users/block_and_unblock_page', to: 'users#block_and_unblock_page', as: 'block_and_unblock_cpf_page'
+  get 'users/:id', to: 'users#profile', as: 'users_profile'
+  patch '/users/:id/block_and_unblock_cpf', to: 'users#block_and_unblock', as: 'block_user_cpf'
+  patch '/users(/:cpf)/block_and_unblock_cpf_in_page', to: 'users#block_and_unblock_cpf_in_page', as: 'block_user_cpf_in_page'
 end

@@ -1,5 +1,5 @@
 <div id="<%= dom_id answer%>">
-  <h4><%= answer.user.name %>
+  <h4><%= link_to answer.user.name, users_profile_path(answer.user.id)%>
     <% if answer.user.admin %>
       (Administrador)
     <% end %>

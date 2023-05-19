@@ -4,7 +4,7 @@
     <dt>Valor: </dt>
     <dd><%= bid.amount %></dd>
     <dt>Autor: </dt>
-    <dd><%= bid.user.name %></dd>
+    <dd><%= link_to bid.user.name, users_profile_path(bid.user.id) %></dd>
     <dt>Dia e horário: </dt>
     <dd><%= l(bid.updated_at.in_time_zone("Brasilia"), format: :bids_format) %></dd>
   </dl>

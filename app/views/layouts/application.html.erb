@@ -27,6 +27,7 @@
             <li><%= link_to 'Lotes Cadastrados', batches_path %></li>
             <li><%= link_to 'Lotes expirados', expired_batches_path %></li>
             <li><%= link_to 'Dúvidas em aberto', doubts_not_answered_path %></li>
+            <li><%= link_to 'Bloquear ou desbloquear um CPF', block_and_unblock_cpf_page_path%></li>
           <% end %>
             <li><%= link_to 'Favoritos', user_favorite_batches_path %></li>
             <% if !current_user.admin %>

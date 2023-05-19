@@ -1,5 +1,6 @@
 class DoubtsController < ApplicationController
   before_action :authenticate_user!
+  before_action :authenticate_user_with_blocked_cpf!, only: [:create]
   before_action :authenticate_admin!, only: [:not_answered, :set_answered, :set_visibility]
 
   def new
@@ -28,13 +29,13 @@ class DoubtsController < ApplicationController
        (approved_by && Date.today >= end_date && bids_present && @doubt.batch.bids.find_by(amount: maximum_bid_amount).user_id == current_user.id)
       if @doubt.save
         respond_to do |format|
-          format.turbo_stream
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("error-messages-doubt", partial: "shared/error_messages", locals: { resource: @doubt }) }
           format.html { redirect_to @doubt.batch }
         end
         return
       else
         respond_to do |format|
-          format.turbo_stream { render turbo_stream: turbo_stream.append("error-messages-doubt", partial: "shared/error_messages", locals: { resource: @doubt }) }
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("error-messages-doubt", partial: "shared/error_messages", locals: { resource: @doubt }) }
           format.html { render :new, status: :unprocessable_entity }
         end
         return
@@ -106,6 +107,14 @@ class DoubtsController < ApplicationController
 
     unless current_user.admin?
       redirect_to root_path, alert: 'Você não tem permissão para acessar essa página.'
+    end
+  end
+
+  def authenticate_user_with_blocked_cpf!
+    authenticate_user!
+
+    if current_user.blocked_cpf_id.present?
+      redirect_to root_path, alert: 'Sua conta está suspensa'
     end
   end
 end

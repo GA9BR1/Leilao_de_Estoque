@@ -1,5 +1,6 @@
 class BidsController < ApplicationController
   before_action :authenticate_user!
+  before_action :authenticate_user_with_blocked_cpf!, only: [:create]
   
   def create
     @bid = Bid.new(bid_params)
@@ -72,5 +73,13 @@ class BidsController < ApplicationController
 
   def bid_params
     params.require(:bid).permit(:amount, :batch_id, :user_id)
+  end
+
+  def authenticate_user_with_blocked_cpf!
+    authenticate_user!
+
+    if current_user.blocked_cpf_id.present?
+      redirect_to root_path, alert: 'Sua conta está suspensa'
+    end
   end
 end

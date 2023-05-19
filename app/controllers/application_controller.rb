@@ -9,6 +9,9 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
+    if resource.blocked_cpf_id.present?
+      flash[:notice] = 'Sua conta está suspensa'
+    end
     stored_location = stored_location_for(resource)
     if stored_location
       stored_location

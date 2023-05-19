@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_17_192301) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_19_020401) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
-    t.bigint "record_id", null: false
-    t.bigint "blob_id", null: false
+    t.integer "record_id", null: false
+    t.integer "blob_id", null: false
     t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
@@ -34,7 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_192301) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.bigint "blob_id", null: false
+    t.integer "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -81,6 +81,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_192301) do
     t.datetime "updated_at", null: false
     t.index ["batch_id"], name: "index_bids_on_batch_id"
     t.index ["user_id"], name: "index_bids_on_user_id"
+  end
+
+  create_table "blocked_cpfs", force: :cascade do |t|
+    t.integer "cpf"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "doubts", force: :cascade do |t|
@@ -135,6 +141,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_192301) do
     t.boolean "admin", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "blocked_cpf_id"
+    t.index ["blocked_cpf_id"], name: "index_users_on_blocked_cpf_id"
     t.index ["cpf"], name: "index_users_on_cpf", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -155,4 +163,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_192301) do
   add_foreign_key "items", "item_categories"
   add_foreign_key "user_favorite_batches", "batches"
   add_foreign_key "user_favorite_batches", "users"
+  add_foreign_key "users", "blocked_cpfs"
 end

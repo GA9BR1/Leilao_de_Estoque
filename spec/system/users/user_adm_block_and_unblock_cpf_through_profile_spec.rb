@@ -1,6 +1,7 @@
 require 'rails_helper'
 
-describe 'Usuário vê a adição de uma dúvida em tempo real na área de dúvidas não respondidas', selenium: true do
+
+describe 'Usuário(adm) bloqueia e desbloqueia um CPF através do perfil dele', selenium: true do
   it 'com sucesso' do
     video_card_category = ItemCategory.create!(name: 'Placas de Vídeo')
 
@@ -17,14 +18,36 @@ describe 'Usuário vê a adição de uma dúvida em tempo real na área de dúvi
     batch.approved_by = user2
     batch.save!
     user3 = User.create!(email: 'leticia@gmail.com ', name: 'Letícia Alcantara', password: 'password', cpf: '61492939048')
+    doubt = Doubt.create!(content: 'SITE FAKE !', user_id: user3.id, batch_id: batch.id)
     login_as(user)
 
     visit root_path
-    click_on 'Dúvidas em aberto'
+    click_on "Leilões em andamento"
+    click_on batch.code
+    
+    click_on user3.name
+    click_on 'Bloquear CPF'
+    
+    expect(page).to have_content('Desbloquear CPF')
 
-    doubt = Doubt.create!(user_id: user3.id, batch_id: batch.id, content: 'Olá onde é feita a retirada do lote ?')
-    sleep 1
-    expect(page).to have_content(doubt.content)
-    expect(page).to have_content(user3.name)
+    expect(BlockedCpf.find(1).cpf.to_i).to eq(user3.cpf.to_i)
+    expect(user3.reload.blocked_cpf_id).to eq(1)
+    
+    click_on 'Desbloquear CPF'
+    sleep 0.5
+    expect(BlockedCpf.count).to eq(0)
+    expect(user3.reload.blocked_cpf_id).to eq(nil)
+    sleep 0.3
+    
+    click_on 'Bloquear CPF'
+
+    sleep 0.3
+    expect(BlockedCpf.find(2).cpf.to_i).to eq(user3.cpf.to_i)
+    expect(user3.reload.blocked_cpf_id).to eq(2)
+    
+    click_on 'Desbloquear CPF'
+    sleep 0.5
+    expect(BlockedCpf.count).to eq(0)
+    expect(user3.reload.blocked_cpf_id).to eq(nil)
   end
 end

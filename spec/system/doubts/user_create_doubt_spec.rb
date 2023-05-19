@@ -56,6 +56,38 @@ describe 'Usuário tenta criar uma nova dúvida', selenium: true do
     expect(page).to have_content('Dúvida não pode ficar em branco')
   end
 
+  it 'e falha pois o cpf está bloqueado' do
+    video_card_category = ItemCategory.create!(name: 'Placas de Vídeo')
+
+    image_file = File.open("#{Rails.root}/spec/system/items/imgs/download.jpg")
+    item = Item.new(name: 'AMD Radeon HD7970 3GB Saphire', description: 'Placa de vídeo para computador',
+                    weight: 3500, width: 25, height: 6, depth: 11, item_category_id: video_card_category.id)
+    item.image.attach(io: image_file, filename: 'download.jpg')
+    item.save!
+
+    user = User.create!(email: 'gustavo@leilaodogalpao.com.br', name: 'Gustavo Alberto', password: 'password', cpf: '73896923080')
+    user2 = User.create!(email: 'joao@leilaodogalpao.com.br', name: 'João Almeida', password: 'password', cpf: '93053597012')
+    batch = Batch.create!(start_date: Date.today, end_date: 7.day.from_now, minimum_bid_difference: 30, created_by_id: user.id, minimum_bid: 30)
+    BatchItem.create!(batch_id: batch.id, item_id: item.id)
+    batch.approved_by = user2
+    batch.save!
+    user3 = User.create!(email: 'leticia@gmail.com ', name: 'Letícia Alcantara', password: 'password', cpf: '61492939048')
+    blocked_cpf = BlockedCpf.create!(cpf: user3.cpf)
+    user3.blocked_cpf_id = blocked_cpf.id
+    user3.save!
+   
+    login_as(user3)
+
+    visit root_path
+    click_on "Leilões em andamento"
+    click_on batch.code
+    fill_in 'Dúvida', with: 'Olá onde é feita a retirada do lote ?'
+    click_on 'Enviar'
+
+    expect(Doubt.count).to eq(0)
+    expect(page).to have_content('Sua conta está suspensa')
+  end
+
   it 'e consegue com sucesso(ADM)' do 
     video_card_category = ItemCategory.create!(name: 'Placas de Vídeo')
 

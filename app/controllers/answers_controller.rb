@@ -1,10 +1,15 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, only: [:new]
+  before_action :authenticate_user_with_blocked_cpf!, only: [:create]
 
   def new
     @doubt = Doubt.find(params[:doubt_id])
     @batch = Batch.find(params[:batch_id])
     @answer = @doubt.answers.new
+  end
+
+  def account_suspended
+
   end
 
   def create
@@ -31,14 +36,14 @@ class AnswersController < ApplicationController
         @answer.save
         respond_to do |format|
           format.turbo_stream do
-            render turbo_stream: turbo_stream.remove("error-messages-answer_#{@answer.doubt.id}")
+            render turbo_stream: turbo_stream.replace("error-messages-answer_#{@answer.doubt.id}", partial: "shared/error_messages_answer", locals: { resource: @answer, id: @answer.doubt.id})
           end
           format.html { redirect_to @answer.doubt.batch }
         end
         return
       else
         respond_to do |format|
-          format.turbo_stream { render turbo_stream: turbo_stream.append("error-messages-answer_#{@answer.doubt.id}", partial: "shared/error_messages", locals: { resource: @answer }) }
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("error-messages-answer_#{@answer.doubt.id}", partial: "shared/error_messages_answer", locals: { resource: @answer, id: @answer.doubt.id}) }
           format.html { render :new, status: :unprocessable_entity }
         end
         return
@@ -53,5 +58,13 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:content, :doubt_id, :user_id)
+  end
+
+  def authenticate_user_with_blocked_cpf!
+    authenticate_user!
+
+    if current_user.blocked_cpf_id.present?
+      redirect_to root_path, alert: 'Sua conta está suspensa'
+    end
   end
 end

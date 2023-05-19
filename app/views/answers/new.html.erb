@@ -8,7 +8,7 @@
       <%= f.hidden_field :doubt_id, value: @answer.doubt.id %>
       <%= f.hidden_field :user_id, value: current_user.id %>
     <div>
-      <%= f.submit 'Enviar' %>
+      <%= f.submit 'Enviar', data: { turbo_frame: "_top" }%>
     </div>
   <% end %>
 <% end %>
