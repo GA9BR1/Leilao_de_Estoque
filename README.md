@@ -104,3 +104,5 @@ rspec
 
 ### Instrução básicas de usuários
     - Para criar um usuário administrador basta adicionar o domínio @leilaodogalpao.com.br em seu e-mail.
+
+OBS: Se vc popular o db com a seed, verá que as imagens aparecem com tamanhos padronizados, se você upar a imagem pela aplicação, ou seja ediitando ou criando um novo item ela será redimensionada normalmente.
